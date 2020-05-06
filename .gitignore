@@ -1,6 +1,9 @@
 # macOS
 .DS_Store
 
+# HSQLDB
+hsqldb/
+
 # IntelliJ
 .idea/**/workspace.xml
 .idea/**/tasks.xml
