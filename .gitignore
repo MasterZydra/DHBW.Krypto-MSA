@@ -20,6 +20,7 @@
 
 # IntelliJ
 out/
+build/
 
 # Compiled class file
 *.class
