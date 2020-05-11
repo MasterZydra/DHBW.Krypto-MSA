@@ -13,6 +13,12 @@ Die entschlüsselte Meldung wird im Ausgabebereich der GUI angezeigt.
 - **crack encrypted message "[message]" using [algorithm]**  
 Die zu dem Algorithmus korrespondierende Komponente [algorithm]\_cracker.jar wird dynamisch geladen und versucht innerhalb von maximal 30 Sekunden die Meldung zu entschlüsseln. Wurde die Meldung innerhalb der Zeitvorgabe entschlüsselt, wird die entschlüsselte Meldung im Ausgabebereich der GUI angezeigt.  
 Wurde die Meldung nicht innerhalb der Zeitvorgabe entschlüsselt, erfolgt die Meldung "_cracking encrypted message "[message]" failed_" im Ausgabebereich der GUI.
+- **register participant [name] with type [normal | intruder]**
+- **create channel [name] from [participant01] to [participant02]**
+- **show channel**
+- **drop channel [name]**
+- **intrude channel [name] by [participant]**
+- **send message "[message]" from [participant01] to [participant02] using [algorithm] and keyfile [name]**
 
 ## Aufgabenstellung
 - **Programmiersprache**  
