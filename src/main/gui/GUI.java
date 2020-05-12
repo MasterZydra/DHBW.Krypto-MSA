@@ -28,7 +28,7 @@ public class GUI extends Application {
 
         executeButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                System.out.println("--- execute ---");
+                System.out.println("---execute  ---");
             }
         });
 
