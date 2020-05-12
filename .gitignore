@@ -1,6 +1,10 @@
 # macOS
 .DS_Store
 
+# VPP Backups
+*.VPP.*
+*.vux
+
 # HSQLDB
 hsqldb/
 
