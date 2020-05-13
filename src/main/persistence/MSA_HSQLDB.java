@@ -12,9 +12,10 @@ public enum MSA_HSQLDB implements IMsaDB{
 
     public static void main(String[] args) {
         MSA_HSQLDB.instance.setupConnection();
-//        MSA_HSQLDB.instance.createTableTypes();
-//        MSA_HSQLDB.instance.createTableParticipants();
-        System.out.println(MSA_HSQLDB.instance.getTypeID("gfd"));
+        MSA_HSQLDB.instance.dropAllTables();
+        MSA_HSQLDB.instance.createAllTables();
+        MSA_HSQLDB.instance.insertType("jolly");
+        System.out.println(MSA_HSQLDB.instance.getTypeID("jolly"));
         MSA_HSQLDB.instance.shutdown();
     }
 
@@ -32,12 +33,12 @@ public enum MSA_HSQLDB implements IMsaDB{
 
     @Override
     public void dropAllTables() {
+        dropTablePostbox();
+        dropTableMessages();
+        dropTableChannel();
+        dropTableParticipants();
         dropTableAlgorithms();
         dropTableTypes();
-        dropTableParticipants();
-        dropTableChannel();
-        dropTableMessages();
-        dropTablePostbox();
     }
 
     @Override
@@ -55,7 +56,7 @@ public enum MSA_HSQLDB implements IMsaDB{
         StringBuilder sqlStringBuilder = new StringBuilder();
         sqlStringBuilder.append("INSERT INTO types (").append("name").append(")");
         sqlStringBuilder.append(" VALUES ");
-        sqlStringBuilder.append("(").append(",").append("'").append(name).append("'");
+        sqlStringBuilder.append("(").append("'").append(name).append("'");
         sqlStringBuilder.append(")");
         System.out.println("sqlStringBuilder : " + sqlStringBuilder.toString());
         update(sqlStringBuilder.toString());
@@ -64,9 +65,9 @@ public enum MSA_HSQLDB implements IMsaDB{
     @Override
     public void insertAlgorithm(String algorithmName) {
         StringBuilder sqlStringBuilder = new StringBuilder();
-        sqlStringBuilder.append("INSERT INTO algorithm (").append("name").append(")");
+        sqlStringBuilder.append("INSERT INTO algorithms (").append("name").append(")");
         sqlStringBuilder.append(" VALUES ");
-        sqlStringBuilder.append("(").append(",").append("'").append(algorithmName).append("'");
+        sqlStringBuilder.append("(").append("'").append(algorithmName).append("'");
         sqlStringBuilder.append(")");
         System.out.println("sqlStringBuilder : " + sqlStringBuilder.toString());
         update(sqlStringBuilder.toString());
@@ -75,9 +76,10 @@ public enum MSA_HSQLDB implements IMsaDB{
     @Override
     public void insertParticipant(String participantName, String type) {
         StringBuilder sqlStringBuilder = new StringBuilder();
-        sqlStringBuilder.append("INSERT INTO algorithm (").append("name").append(",").append("type_id").append(")");
+        sqlStringBuilder.append("INSERT INTO participants (").append("name").append(",").append("type_id").append(")");
         sqlStringBuilder.append(" VALUES ");
-        sqlStringBuilder.append("(").append(",").append("'").append(participantName).append("'");
+        sqlStringBuilder.append("(").append("'").append(participantName).append("',");
+        sqlStringBuilder.append("'").append(type).append("'");
         sqlStringBuilder.append(")");
         System.out.println("sqlStringBuilder : " + sqlStringBuilder.toString());
         update(sqlStringBuilder.toString());
@@ -143,6 +145,20 @@ public enum MSA_HSQLDB implements IMsaDB{
         return false;
     }
 
+    private int getTypeID(String name){
+        try {
+            String sqlStatement = "SELECT ID from TYPES where name='" + name + "'";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlStatement);
+            if (!resultSet.next()) { throw new SQLException(name + " type not found"); }
+            return resultSet.getInt("ID");
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+        return -1;
+    }
+
+
     private synchronized void update(String sqlStatement) {
         try {
             Statement statement = connection.createStatement();
@@ -157,6 +173,19 @@ public enum MSA_HSQLDB implements IMsaDB{
             System.out.println(sqle.getMessage());
         }
     }
+
+    public void shutdown() {
+        System.out.println("--- shutdown");
+
+        try {
+            Statement statement = connection.createStatement();
+            statement.execute("SHUTDOWN");
+            connection.close();
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+    }
+
 
     private void createTableTypes() {
         System.out.println("--- createTableTypes");
@@ -347,48 +376,5 @@ public enum MSA_HSQLDB implements IMsaDB{
         update(sqlStringBuilder.toString());
     }
 
-    public void insertDataTableParticipants(String name, int typeID) {
-        StringBuilder sqlStringBuilder = new StringBuilder();
-        sqlStringBuilder.append("INSERT INTO participants (").append(",").append("name").append(",").append("type_id").append(")");
-        sqlStringBuilder.append(" VALUES ");
-        sqlStringBuilder.append("(").append(",").append("'").append(name).append("'").append(",").append(typeID);
-        sqlStringBuilder.append(")");
-        System.out.println("sqlStringBuilder : " + sqlStringBuilder.toString());
-        update(sqlStringBuilder.toString());
-    }
 
-    public void insertDataTableTypes(String name) {
-        StringBuilder sqlStringBuilder = new StringBuilder();
-        sqlStringBuilder.append("INSERT INTO types (").append(",").append("name").append(")");
-        sqlStringBuilder.append(" VALUES ");
-        sqlStringBuilder.append("(").append(",").append("'").append(name).append("'");
-        sqlStringBuilder.append(")");
-        System.out.println("sqlStringBuilder : " + sqlStringBuilder.toString());
-        update(sqlStringBuilder.toString());
-    }
-
-    private int getTypeID(String name){
-        try {
-            String sqlStatement = "SELECT ID from TYPES where name='" + name + "'";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-            if (!resultSet.next()) { throw new SQLException(name + " type not found"); }
-            return resultSet.getInt("ID");
-        } catch (SQLException sqle) {
-            System.out.println(sqle.getMessage());
-        }
-        return -1;
-    }
-
-    public void shutdown() {
-        System.out.println("--- shutdown");
-
-        try {
-            Statement statement = connection.createStatement();
-            statement.execute("SHUTDOWN");
-            connection.close();
-        } catch (SQLException sqle) {
-            System.out.println(sqle.getMessage());
-        }
-    }
 }
