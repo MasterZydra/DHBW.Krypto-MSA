@@ -1,6 +1,6 @@
-package persistence;
+package main.persistence;
 
-import configuration.Configuration;
+import main.configuration.Configuration;
 
 import java.sql.*;
 
