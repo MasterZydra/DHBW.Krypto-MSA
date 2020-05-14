@@ -31,7 +31,6 @@ public enum MSA_HSQLDB implements IMsaDB {
         db.shutdown();
     }
 
-
     @Override
     public void setupConnection() {
         System.out.println("--- setupConnection");
@@ -178,7 +177,6 @@ public enum MSA_HSQLDB implements IMsaDB {
     public List<String> getPostboxMessages(String participant) {
         return null;
     }
-
 
     @Override
     public boolean channelExists(String channelName) {
