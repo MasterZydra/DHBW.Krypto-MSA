@@ -8,4 +8,8 @@ public class CommandFactory {
     public static ICommand getEncryptMessageCommand() {
         return new EncryptMessageCommand();
     }
+
+    public static ICommand getDecryptMessageCommand() {
+        return new DecryptMessageCommand();
+    }
 }
