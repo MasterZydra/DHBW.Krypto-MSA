@@ -38,4 +38,6 @@ public interface IMsaDB {
     String getChannel(String participantA, String participantB);
 
     String getParticipantType(String participant);
+
+    void dropChannel(String channelName);
 }

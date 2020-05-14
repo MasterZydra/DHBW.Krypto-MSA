@@ -181,7 +181,7 @@ public enum MSA_HSQLDB implements IMsaDB {
     @Override
     public boolean channelExists(String channelName) {
         try {
-            String sqlStatement = "SELECT ID from channel where name='" + channelName + "'";
+            String sqlStatement = "SELECT name from channel where name='" + channelName + "'";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
             if (!resultSet.next()) {
@@ -198,7 +198,7 @@ public enum MSA_HSQLDB implements IMsaDB {
     public String getChannel(String participantA, String participantB) {
         try {
             String sqlStatement = MessageFormat.format(
-                    "SELECT name from channel where (participant_01='{0}' AND participant_02='{1}') or (participant_01='{1}' AND participant_02='{0}')",
+                    "SELECT name from channel where (participant_01=''{0}'' AND participant_02=''{1}'') or (participant_01=''{1}'' AND participant_02=''{0}'')",
                     participantA, participantB);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
@@ -210,6 +210,22 @@ public enum MSA_HSQLDB implements IMsaDB {
             System.out.println(sqle.getMessage());
         }
         return null;
+    }
+
+    @Override
+    public void dropChannel(String channelName) {
+        try {
+            String sqlStatement = MessageFormat.format(
+                    "DELETE FROM channel WHERE name=''{0}''",
+                    channelName);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlStatement);
+            if (!resultSet.next()) {
+                throw new SQLException(channelName + " could not be deleted");
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
     }
 
     @Override
