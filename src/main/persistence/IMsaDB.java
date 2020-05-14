@@ -33,9 +33,15 @@ public interface IMsaDB {
 
     List<String> getPostboxMessages(String participant);
 
+    List<String> getChannels();
+
     boolean channelExists(String channelName);
+
+    boolean participantExists(String name);
 
     String getChannel(String participantA, String participantB);
 
     String getParticipantType(String participant);
+
+    void dropChannel(String channelName);
 }

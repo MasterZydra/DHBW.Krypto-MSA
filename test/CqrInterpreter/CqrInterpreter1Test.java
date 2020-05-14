@@ -1,4 +1,4 @@
-package test;
+package CqrInterpreter;
 
 import main.commands.ICommand;
 import main.commands.ShowAlgorithmCommand;

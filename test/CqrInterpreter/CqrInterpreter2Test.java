@@ -1,4 +1,4 @@
-package test;
+package CqrInterpreter;
 
 import main.commands.EncryptMessageCommand;
 import main.commands.ICommand;
