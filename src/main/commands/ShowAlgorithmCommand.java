@@ -5,6 +5,10 @@ public class ShowAlgorithmCommand implements ICommand {
 
     }
 
+    public String getParam(String name) {
+        return null;
+    }
+
     public void execute() {
 
     }
