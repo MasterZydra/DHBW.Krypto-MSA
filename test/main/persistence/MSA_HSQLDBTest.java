@@ -1,12 +1,15 @@
 package main.persistence;
 
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class MSA_HSQLDBTest {
 
-static MSA_HSQLDB db;
+    static MSA_HSQLDB db;
 
     @BeforeClass
     public static void beforeClass() throws Exception {
@@ -28,17 +31,17 @@ static MSA_HSQLDB db;
         db.insertAlgorithm("none");
         db.insertAlgorithm("rsa");
         db.insertAlgorithm("shift");
-        db.insertParticipant("a","normal");
-        db.insertParticipant("b","normal");
-        db.insertParticipant("c","intruder");
-        db.insertChannel("channel1","a","b");
-        db.insertMessage("a","b","plainmessage","none","plainmessage","keyfileName");
+        db.insertParticipant("a", "normal");
+        db.insertParticipant("b", "normal");
+        db.insertParticipant("c", "intruder");
+        db.insertChannel("channel1", "a", "b");
+        db.insertMessage("a", "b", "plainmessage", "none", "plainmessage", "keyfileName");
     }
 
     @Test
     public void insertType() {
         db.insertType("type3");
-        db.insertParticipant("d","type3");
+        db.insertParticipant("d", "type3");
         String d = db.getParticipantType("d");
         assertEquals("type3", d);
     }

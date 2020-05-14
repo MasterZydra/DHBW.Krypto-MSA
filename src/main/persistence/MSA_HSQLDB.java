@@ -22,11 +22,11 @@ public enum MSA_HSQLDB implements IMsaDB {
         db.insertAlgorithm("none");
         db.insertAlgorithm("rsa");
         db.insertAlgorithm("shift");
-        db.insertParticipant("a","normal");
-        db.insertParticipant("b","normal");
-        db.insertParticipant("c","intruder");
-        db.insertChannel("channel1","a","b");
-        db.insertMessage("a","b","plainmessage","none","plainmessage","keyfileName");
+        db.insertParticipant("a", "normal");
+        db.insertParticipant("b", "normal");
+        db.insertParticipant("c", "intruder");
+        db.insertChannel("channel1", "a", "b");
+        db.insertMessage("a", "b", "plainmessage", "none", "plainmessage", "keyfileName");
         System.out.println(db.getTypeID("jolly"));
         db.shutdown();
     }
@@ -152,7 +152,7 @@ public enum MSA_HSQLDB implements IMsaDB {
         sqlStringBuilder.append("INSERT INTO messages (PARTICIPANT_FROM_ID, PARTICIPANT_TO_ID, PLAIN_MESSAGE, ALGORITHM_ID, ENCRYPTED_MESSAGE, KEYFILE, TIMESTAMP)");
         sqlStringBuilder.append(" VALUES (");
         sqlStringBuilder.append(MessageFormat.format("{0}, {1}, ''{2}'', {3}, ''{4}'', ''{5}'', {6} ",
-                participantFromID, participantToID, plainMessage, algorithmID, encodedMessage, keyFile, Long.toString(timeStamp) ));
+                participantFromID, participantToID, plainMessage, algorithmID, encodedMessage, keyFile, Long.toString(timeStamp)));
         sqlStringBuilder.append(")");
         System.out.println("sqlStringBuilder : " + sqlStringBuilder.toString());
         update(sqlStringBuilder.toString());
@@ -216,7 +216,7 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     @Override
     public String getParticipantType(String participant) {
-        int typeID=-1;
+        int typeID = -1;
         try {
             String sqlStatement = "SELECT TYPE_ID from PARTICIPANTS where name='" + participant + "'";
             Statement statement = connection.createStatement();
@@ -285,9 +285,6 @@ public enum MSA_HSQLDB implements IMsaDB {
         }
         return -1;
     }
-
-
-
 
 
     private void createTableTypes() {
