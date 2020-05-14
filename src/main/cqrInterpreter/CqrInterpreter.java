@@ -1,17 +1,27 @@
 package main.cqrInterpreter;
 
+import main.commands.ICommand;
+
 public abstract class CqrInterpreter {
     private CqrInterpreter successor;
 
-    public void interprete(String cqr) {
+    public ICommand interpret(String cqr) {
         if (getSuccessor() != null)
-            getSuccessor().interprete(cqr);
-        else
+            return getSuccessor().interpret(cqr);
+        else {
             System.out.println("Invalid command");
+            return null;
+        }
+    }
+
+    protected String transformCqrString(String cqr) {
+        return cqr.trim().toLowerCase();
     }
 
     protected boolean canHandleCQR(String cqr, String cqrStart) {
-        return cqr.startsWith(cqrStart);
+        String cqrTrans = this.transformCqrString(cqr);
+        String cqrStartTrans = this.transformCqrString(cqrStart);
+        return cqrTrans.startsWith(cqrStartTrans);
     }
 
     public CqrInterpreter getSuccessor() {
