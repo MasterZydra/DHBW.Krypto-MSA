@@ -5,6 +5,7 @@ import main.configuration.Configuration;
 import java.sql.*;
 import java.text.MessageFormat;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 public enum MSA_HSQLDB implements IMsaDB {
@@ -27,7 +28,7 @@ public enum MSA_HSQLDB implements IMsaDB {
         db.insertParticipant("c", "intruder");
         db.insertChannel("channel1", "a", "b");
         db.insertMessage("a", "b", "plainmessage", "none", "plainmessage", "keyfileName");
-        System.out.println(db.getTypeID("jolly"));
+        System.out.println(db.getChannels());
         db.shutdown();
     }
 
@@ -175,13 +176,58 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     @Override
     public List<String> getPostboxMessages(String participant) {
+        List<String> msgList = new ArrayList<>();
+        int partToID = getParticipantID(participant);
+        try {
+            String sqlStatement = "SELECT * from POSTBOX where PARTICIPANT_TO_ID=" + partToID;
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlStatement);
+            while (resultSet.next()) {
+                StringBuilder sb = new StringBuilder();
+                int partFromID = resultSet.getInt("participant_from_id");
+                String partFromName = getParticipantName(partFromID);
+                sb.append("--- ").append(partFromName).append(" ---\n");
+                sb.append(resultSet.getString("message"));
+                sb.append("\n--- ").append(resultSet.getInt("timestamp")).append(" ---");
+                msgList.add(sb.toString());
+            }
+            return msgList;
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+        return null;
+
+    }
+
+    @Override
+    public List<String> getChannels() {
+        List<String> channelList = new ArrayList<>();
+        try {
+            String sqlStatement = "SELECT * from channel";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlStatement);
+            while (resultSet.next()) {
+                StringBuilder sb = new StringBuilder();
+                int part1 = resultSet.getInt("participant_01");
+                int part2 = resultSet.getInt("participant_02");
+                String part1Name = getParticipantName(part1);
+                String part2Name = getParticipantName(part2);
+                sb.append(resultSet.getString("name")).append(" | ");
+                sb.append(part1Name).append(" and ");
+                sb.append(part2Name);
+                channelList.add(sb.toString());
+            }
+            return channelList;
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
         return null;
     }
 
     @Override
     public boolean channelExists(String channelName) {
         try {
-            String sqlStatement = "SELECT ID from channel where name='" + channelName + "'";
+            String sqlStatement = "SELECT name from channel where name='" + channelName + "'";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
             if (!resultSet.next()) {
@@ -195,11 +241,19 @@ public enum MSA_HSQLDB implements IMsaDB {
     }
 
     @Override
+    public boolean participantExists(String name) {
+        int participantAID = getParticipantID(name);
+        return participantAID != -1;
+    }
+
+    @Override
     public String getChannel(String participantA, String participantB) {
         try {
+            int participantAID = getParticipantID(participantA);
+            int participantBID = getParticipantID(participantB);
             String sqlStatement = MessageFormat.format(
-                    "SELECT name from channel where (participant_01='{0}' AND participant_02='{1}') or (participant_01='{1}' AND participant_02='{0}')",
-                    participantA, participantB);
+                    "SELECT name from channel where (participant_01=''{0}'' AND participant_02=''{1}'') or (participant_01=''{1}'' AND participant_02=''{0}'')",
+                    participantAID, participantBID);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
             if (!resultSet.next()) {
@@ -210,6 +264,22 @@ public enum MSA_HSQLDB implements IMsaDB {
             System.out.println(sqle.getMessage());
         }
         return null;
+    }
+
+    @Override
+    public void dropChannel(String channelName) {
+        try {
+            String sqlStatement = MessageFormat.format(
+                    "DELETE FROM channel WHERE name=''{0}''",
+                    channelName);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlStatement);
+            if (!resultSet.next()) {
+                throw new SQLException(channelName + " could not be deleted");
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
     }
 
     @Override
@@ -237,6 +307,8 @@ public enum MSA_HSQLDB implements IMsaDB {
         }
         return null;
     }
+
+
 
 
     private int getTypeID(String name) {
@@ -267,6 +339,21 @@ public enum MSA_HSQLDB implements IMsaDB {
             System.out.println(sqle.getMessage());
         }
         return -1;
+    }
+
+    private String getParticipantName(int participantID) {
+        try {
+            String sqlStatement = "SELECT name from participants where ID="+participantID;
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlStatement);
+            if (!resultSet.next()) {
+                throw new SQLException(" participant not found with ID " + participantID);
+            }
+            return resultSet.getString("name");
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+        return null;
     }
 
     private int getAlgorithmID(String algorithm) {
