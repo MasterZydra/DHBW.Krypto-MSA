@@ -2,6 +2,10 @@ package main.commands;
 
 public class CommandFactory {
     public static ICommand getShowAlgorithmCommand() {
-        return null;
+        return new ShowAlgorithmCommand();
+    }
+
+    public static ICommand getEncryptMessageCommand() {
+        return new EncryptMessageCommand();
     }
 }
