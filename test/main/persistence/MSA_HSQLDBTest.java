@@ -1,8 +1,11 @@
 package main.persistence;
 
+import main.persistence.dataModels.Channel;
+import main.persistence.dataModels.PostboxMessage;
 import org.junit.*;
 
 import java.time.Instant;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -47,12 +50,11 @@ public class MSA_HSQLDBTest {
         assertEquals("type3", d);
     }
 
-    @Ignore
     @Test
     public void insertAlgorithm() {
-        String d="";
         db.insertAlgorithm("type3");
-        assertEquals("type3", d);
+        List<String> d = db.getAlgorithms();
+        assertTrue(d.contains("type3"));
     }
 
     @Test
@@ -91,11 +93,13 @@ public class MSA_HSQLDBTest {
             b=""+Instant.now().getEpochSecond();
         }
         db.insertPostboxMessage("a","b","message3\ncontent\ncontent2");
-        for (String msg : db.getPostboxMessages("a")){
-            System.out.println(msg);
+        for (PostboxMessage msg : db.getPostboxMessages("a")){
+            System.out.println(msg.getTimestamp() + "\n " +
+                    msg.getParticipantFrom().getName() + "\n " + msg.getParticipantTo().getName()
+                    +"\n " + msg.getMessage());
             System.out.println();
         }
-        assertTrue(db.getPostboxMessages("a")!=null);
+        assertTrue(db.getPostboxMessages("a").size()>0);
     }
 
     @Test
@@ -108,11 +112,13 @@ public class MSA_HSQLDBTest {
             b=""+Instant.now().getEpochSecond();
         }
         db.insertPostboxMessage("a","b","message3\ncontent\ncontent2");
-        for (String msg : db.getPostboxMessages("a")){
-            System.out.println(msg);
+        for (PostboxMessage msg : db.getPostboxMessages("a")){
+            System.out.println(msg.getTimestamp() + "\n " +
+                    msg.getParticipantFrom().getName() + "\n " + msg.getParticipantTo().getName()
+                    +"\n " + msg.getMessage());
             System.out.println();
         }
-        assertTrue(db.getPostboxMessages("a")!=null);
+        assertTrue(db.getPostboxMessages("a").size()>0);
     }
 
     @Test
@@ -122,15 +128,15 @@ public class MSA_HSQLDBTest {
 
     @Test
     public void getChannel() {
-        String expected="channel1";
-        String result = db.getChannel("a","b");
+        String  expected="channel1";
+        String  result = db.getChannel("a","b").getName();
         assertEquals(expected,result);
     }
 
     @Test
     public void getChannels() {
-        String expected="[channel1 | a and b]";
-        String result = db.getChannels().toString();
+        String expected = "channel1";
+        String result = db.getChannels().get(0).getName();
         assertEquals(expected,result);
     }
 
