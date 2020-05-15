@@ -25,8 +25,8 @@ public class LoggerMSA {
     public void log(String message) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(logFile, StandardCharsets.UTF_8, true)))
         {
-            bw.newLine();
             bw.write(message);
+            bw.newLine();
         }
         catch (IOException e)
         {
