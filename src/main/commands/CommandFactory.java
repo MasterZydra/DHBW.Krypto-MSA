@@ -12,4 +12,8 @@ public class CommandFactory {
     public static ICommand getDecryptMessageCommand() {
         return new DecryptMessageCommand();
     }
+
+    public static ICommand getCrackMessageCommand() {
+        return new CrackMessageCommand();
+    }
 }
