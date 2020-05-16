@@ -16,4 +16,8 @@ public class CommandFactory {
     public static ICommand getCrackMessageCommand() {
         return new CrackMessageCommand();
     }
+
+    public static ICommand getRegisterParticipantCommand() {
+        return new RegisterParticipantCommand();
+    }
 }
