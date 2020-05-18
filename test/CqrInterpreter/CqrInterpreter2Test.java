@@ -1,9 +1,9 @@
 package CqrInterpreter;
 
-import main.commands.EncryptMessageCommand;
-import main.commands.ICommand;
-import main.cqrInterpreter.CqrInterpreter;
-import main.cqrInterpreter.CqrInterpreter2;
+import commands.EncryptMessageCommand;
+import commands.ICommand;
+import cqrInterpreter.CqrInterpreter;
+import cqrInterpreter.CqrInterpreter2;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;

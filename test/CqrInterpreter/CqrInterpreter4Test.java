@@ -1,9 +1,9 @@
 package CqrInterpreter;
 
-import main.commands.CrackMessageCommand;
-import main.commands.ICommand;
-import main.cqrInterpreter.CqrInterpreter;
-import main.cqrInterpreter.CqrInterpreter4;
+import commands.CrackMessageCommand;
+import commands.ICommand;
+import cqrInterpreter.CqrInterpreter;
+import cqrInterpreter.CqrInterpreter4;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
