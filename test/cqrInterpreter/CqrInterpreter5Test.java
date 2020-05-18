@@ -1,9 +1,7 @@
-package CqrInterpreter;
+package cqrInterpreter;
 
 import commands.RegisterParticipantCommand;
 import commands.ICommand;
-import cqrInterpreter.CqrInterpreter;
-import cqrInterpreter.CqrInterpreter5;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
