@@ -7,15 +7,9 @@ import logger.LoggerMSA;
 
 import java.util.List;
 
-public class ShowAlgorithmCommand implements ICommand {
-    public void setParam(String name, String value) {
+public class ShowAlgorithmCommand extends CqrCommand {
 
-    }
-
-    public String getParam(String name) {
-        return null;
-    }
-
+    @Override
     public void execute() {
         LoggerMSA logger = new LoggerMSA("noCryptoAction", "noAlgorithm");
         logger.log("executing ShowAlgorithmCommand");
@@ -32,6 +26,5 @@ public class ShowAlgorithmCommand implements ICommand {
         gui.displayText(output);
         logger.log("displayed output:"+output);
         logger.log("executed ShowAlgorithmCommand");
-
     }
 }
