@@ -1,5 +1,7 @@
 package logger;
 
+import configuration.Configuration;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -9,17 +11,15 @@ import java.time.Instant;
 
 public class LoggerMSA {
 
-    public static final String logFolder = "log";
-    public static final String fileSeparator = File.separator;
-    public static final String logFolderPath = logFolder + fileSeparator;
+    String logDirectory = Configuration.instance.logDirectory;
     File  logFile = null;
 
     public LoggerMSA(String cryptographyActionType, String algorithm) {
-        String outputFileString = logFolderPath + cryptographyActionType + "_"
+        String outputFileString = logDirectory + cryptographyActionType + "_"
                 + algorithm + "_"
                 + Instant.now().getEpochSecond() + ".txt";
         logFile = new File(outputFileString);
-        new File(logFolderPath).mkdir();
+        new File(logDirectory).mkdir();
     }
 
     public void log(String message) {
