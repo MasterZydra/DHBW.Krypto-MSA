@@ -47,6 +47,10 @@ public enum Configuration {
     // keyfiles
     public String getKeyFilePath = ud + fs + "keyfiles" + fs;
 
+    Configuration() {
+        loadProperties();
+    }
+
     public String getCryptoAlgorithmPath() {
         String path = componentDirectory;
         switch (cryptoAlgorithm) {
@@ -70,11 +74,14 @@ public enum Configuration {
             System.out.println("Could not load config.properties");
             e.printStackTrace();
         }
-        algorithm = props.getProperty("algorithm","shift");
-    }
-
-    private void loadAlgorithms(){
-
+        algorithm = props.getProperty("algorithm",cryptoAlgorithm.toString());
+        for (CryptoAlgorithm algo: CryptoAlgorithm.values()
+             ) {
+            if (algorithm.equalsIgnoreCase(algo.toString())){
+                cryptoAlgorithm = algo;
+            }
+        }
+        crackingMaxSeconds = Integer.parseInt(props.getProperty("crackingMaxSeconds", Integer.toString(crackingMaxSeconds)));
     }
 
     public List<String> getAlgorithmFileNames() {
@@ -101,6 +108,8 @@ public enum Configuration {
     public static void main(String[] args) {
 
         System.out.println(Configuration.instance.getAlgorithmFileNames());
+        System.out.println(Configuration.instance.algorithm);
+        System.out.println(Configuration.instance.crackingMaxSeconds);
 
 //        try {
 //            System.out.println(Configuration.instance.ud + Configuration.instance.fs);
