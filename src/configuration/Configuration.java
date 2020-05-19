@@ -12,7 +12,7 @@ import java.util.Properties;
 public enum Configuration {
     instance;
 
-    public static Storage storage = Storage.instance;
+    public static RuntimeStorage runtimeStorage = runtimeStorage.instance;
 
     //default values
     public CryptoAlgorithm cryptoAlgorithm = CryptoAlgorithm.RSA;

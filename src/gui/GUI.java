@@ -23,7 +23,7 @@ public class GUI extends Application {
 
     public void start(Stage primaryStage) {
 
-        Configuration.storage.guiController = guiController;
+        Configuration.runtimeStorage.guiController = guiController;
 
         primaryStage.setTitle("MSA | Mosbach Security Agency");
 

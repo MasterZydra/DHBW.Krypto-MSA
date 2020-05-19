@@ -22,6 +22,6 @@ public class ShowAlgorithmCommand implements ICommand {
             output += algo;
 
         }
-        Configuration.storage.guiController.displayText(output);
+        Configuration.runtimeStorage.guiController.displayText(output);
     }
 }
