@@ -1,4 +1,4 @@
-package main.logger;
+package logger;
 
 import java.io.File;
 import java.time.Instant;
