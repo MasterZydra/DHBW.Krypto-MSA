@@ -12,6 +12,8 @@ import java.util.Properties;
 public enum Configuration {
     instance;
 
+    public static Storage storage = Storage.instance;
+
     //default values
     public CryptoAlgorithm cryptoAlgorithm = CryptoAlgorithm.RSA;
     public int crackingMaxSeconds = 30;
