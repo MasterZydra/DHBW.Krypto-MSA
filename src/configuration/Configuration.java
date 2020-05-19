@@ -12,7 +12,7 @@ import java.util.Properties;
 public enum Configuration {
     instance;
 
-    public static RuntimeStorage runtimeStorage = runtimeStorage.instance;
+    public static RuntimeStorage runtimeStorage = RuntimeStorage.instance;
 
     //default values
     public CryptoAlgorithm cryptoAlgorithm = CryptoAlgorithm.RSA;
@@ -74,21 +74,25 @@ public enum Configuration {
             System.out.println("Could not load config.properties");
             e.printStackTrace();
         }
-        algorithm = props.getProperty("algorithm",cryptoAlgorithm.toString());
+        algorithm = props.getProperty("algorithm");
         for (CryptoAlgorithm algo: CryptoAlgorithm.values()
              ) {
             if (algorithm.equalsIgnoreCase(algo.toString())){
                 cryptoAlgorithm = algo;
             }
         }
-        crackingMaxSeconds = Integer.parseInt(props.getProperty("crackingMaxSeconds", Integer.toString(crackingMaxSeconds)));
+        try {
+            crackingMaxSeconds = Integer.parseInt(props.getProperty("crackingMaxSeconds"));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<String> getAlgorithmFileNames() {
         List<String> filenames = new ArrayList<>();
         String path = Configuration.instance.componentDirectory;
         try {
-            Files.walk(Paths.get(Configuration.instance.componentDirectory))
+            Files.walk(Paths.get(path))
                     .filter(Files::isRegularFile)
                     .forEach((f)->{
                         String file = f.toString();
@@ -99,25 +103,12 @@ public enum Configuration {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return filenames;
     }
 
-
-
     public static void main(String[] args) {
-
         System.out.println(Configuration.instance.getAlgorithmFileNames());
         System.out.println(Configuration.instance.algorithm);
         System.out.println(Configuration.instance.crackingMaxSeconds);
-
-//        try {
-//            System.out.println(Configuration.instance.ud + Configuration.instance.fs);
-//            List<String> a = Configuration.instance.getResourceFiles(Configuration.instance.ud + Configuration.instance.fs);
-//            System.out.println(a);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
     }
 }
