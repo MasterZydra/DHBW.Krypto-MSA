@@ -1,5 +1,9 @@
 package commands;
 
+import configuration.Configuration;
+
+import java.util.List;
+
 public class ShowAlgorithmCommand implements ICommand {
     public void setParam(String name, String value) {
 
@@ -10,6 +14,14 @@ public class ShowAlgorithmCommand implements ICommand {
     }
 
     public void execute() {
+        List<String> list = Configuration.instance.getAlgorithmFileNames();
+        String output= "";
+        for (String algo: list
+             ) {
+            if(!output.isBlank()) output+=" | ";
+            output += algo;
 
+        }
+        Configuration.storage.guiController.displayText(output);
     }
 }
