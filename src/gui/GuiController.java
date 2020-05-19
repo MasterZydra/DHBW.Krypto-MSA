@@ -1,8 +1,8 @@
-package main.gui;
+package gui;
 
-import main.commands.ICommand;
-import main.configuration.Configuration;
-import main.cqrInterpreter.CqrInterpreter1;
+import commands.ICommand;
+import configuration.Configuration;
+import cqrInterpreter.CqrInterpreter1;
 
 public class GuiController {
     private GUI gui;

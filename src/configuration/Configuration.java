@@ -3,6 +3,8 @@ package configuration;
 import cryptography.CryptoAlgorithm;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -73,42 +75,38 @@ public enum Configuration {
 
     }
 
-    private List<String> getResourceFiles(String path) throws IOException {
+    public List<String> getAlgorithmFileNames() {
         List<String> filenames = new ArrayList<>();
-
-        try (
-                InputStream in = getResourceAsStream(path);
-                BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
-            String resource;
-
-            while ((resource = br.readLine()) != null) {
-                filenames.add(resource);
-            }
+        String path = Configuration.instance.componentDirectory;
+        try {
+            Files.walk(Paths.get(Configuration.instance.componentDirectory))
+                    .filter(Files::isRegularFile)
+                    .forEach((f)->{
+                        String file = f.toString();
+                        if( file.endsWith(".jar")){
+                            String fName = f.getFileName().toString().toLowerCase();
+                            filenames.add(fName.substring(0,fName.length()-4));}
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return filenames;
     }
 
-    private InputStream getResourceAsStream(String resource) {
-        final InputStream in
-                = getContextClassLoader().getResourceAsStream(resource);
 
-        return in == null ? getClass().getResourceAsStream(resource) : in;
-    }
-
-    private ClassLoader getContextClassLoader() {
-        return Thread.currentThread().getContextClassLoader();
-    }
 
     public static void main(String[] args) {
 
-        try {
-            System.out.println(Configuration.instance.ud + Configuration.instance.fs);
-            List<String> a = Configuration.instance.getResourceFiles(Configuration.instance.ud + Configuration.instance.fs);
-            System.out.println(a);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println(Configuration.instance.getAlgorithmFileNames());
+
+//        try {
+//            System.out.println(Configuration.instance.ud + Configuration.instance.fs);
+//            List<String> a = Configuration.instance.getResourceFiles(Configuration.instance.ud + Configuration.instance.fs);
+//            System.out.println(a);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
     }
 }
