@@ -16,19 +16,22 @@ import java.util.List;
 
 public class LoggerMSA {
 
-    String logDirectory = Configuration.instance.logDirectory;
-    File  logFile = null;
+    static private Configuration cfg = Configuration.instance;
+    static private String logDirectory = cfg.logDirectory;
+    private boolean loggingEnabled = cfg.loggingEnabled;
+    private File logFile = null;
 
     public LoggerMSA(String cryptographyActionType, String algorithm) {
         String fileName = cryptographyActionType + "_"
                 + algorithm + "_"
                 + Instant.now().getEpochSecond() + ".txt";
-        String outputFileString = logDirectory + Configuration.instance.fs + fileName;
+        String outputFileString = logDirectory + cfg.fs + fileName;
         logFile = new File(outputFileString);
         new File(logDirectory).mkdir();
     }
 
     public void log(String message) {
+        if (!loggingEnabled) return;
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(logFile, StandardCharsets.UTF_8, true)))
         {
             bw.write(message);
@@ -86,7 +89,7 @@ public class LoggerMSA {
 
     public static void main(String[] args) {
         LoggerMSA lt = new LoggerMSA("encode", "none");
-        lt.log("message!");
+        lt.log("logger custom message!");
         System.out.println("latest: "+LoggerMSA.getLatestLog());
     }
 }

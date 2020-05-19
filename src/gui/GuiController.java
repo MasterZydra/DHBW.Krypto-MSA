@@ -7,7 +7,6 @@ import logger.LoggerMSA;
 
 public class GuiController {
     private GUI gui;
-    private boolean isLoggingEnabled = false;
     private Configuration cfg = Configuration.instance;
 
     public GuiController(GUI gui) {
@@ -30,16 +29,17 @@ public class GuiController {
 
     public void disableLogging(){
         displayText("logging off");
-        isLoggingEnabled = false;
+        cfg.disableLogging();
     }
 
     public void enableLogging(){
         displayText("logging on");
-        isLoggingEnabled = true;
+        cfg.enableLogging();
+
     }
 
     public boolean isLoggingEnabled() {
-        return isLoggingEnabled;
+        return cfg.loggingEnabled;
     }
 
     public void displayLog() {

@@ -1,6 +1,8 @@
 package configuration;
 
 import cryptography.CryptoAlgorithm;
+import persistence.IMsaDB;
+import persistence.MSA_HSQLDB;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -17,6 +19,7 @@ public enum Configuration {
     //default values
     public CryptoAlgorithm cryptoAlgorithm = CryptoAlgorithm.RSA;
     public int crackingMaxSeconds = 30;
+    public boolean loggingEnabled = true;
 
     // common
     public final String ud = System.getProperty("user.dir");
@@ -49,6 +52,16 @@ public enum Configuration {
 
     Configuration() {
         loadProperties();
+        loadNetworksFromDatabase();
+    }
+
+    private void loadNetworksFromDatabase() {
+        IMsaDB db = MSA_HSQLDB.instance;
+        //db.createAllTables();
+        for (CryptoAlgorithm algo: CryptoAlgorithm.values()
+             ) {
+            db.insertAlgorithm(algo.toString());
+        }
     }
 
     public String getCryptoAlgorithmPath() {
@@ -110,5 +123,13 @@ public enum Configuration {
         System.out.println(Configuration.instance.getAlgorithmFileNames());
         System.out.println(Configuration.instance.algorithm);
         System.out.println(Configuration.instance.crackingMaxSeconds);
+    }
+
+    public void enableLogging() {
+        loggingEnabled = true;
+    }
+
+    public void disableLogging() {
+        loggingEnabled = false;
     }
 }
