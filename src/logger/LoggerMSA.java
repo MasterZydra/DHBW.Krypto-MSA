@@ -2,10 +2,7 @@ package logger;
 
 import configuration.Configuration;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -44,17 +41,37 @@ public class LoggerMSA {
     static public String getLatestLog() {
         List<String> filedates = new ArrayList<>();
         String path = Configuration.instance.logDirectory;
-        Long youngestTimeStamp = 0L;
         Path newestLogFile=null;
+        Comparator<Path> byTimeStamp = (path1, path2) -> {
+            String path1str = path1.getFileName().toString();
+            long timeStamp1 = Long.parseLong( path1str.substring(path1str.lastIndexOf("_"), path1str.length() - 4) );
+            String path2str = path2.getFileName().toString();
+            long timeStamp2 = Long.parseLong( path2str.substring(path2str.lastIndexOf("_"), path2str.length() - 4) );
+            return Long.compare(timeStamp1,timeStamp2);
+        };
+
         try {
             newestLogFile = Files.walk(Paths.get(path))
                     .filter(Files::isRegularFile)
-                    .max(Comparator.naturalOrder()).orElse(null);
+                    .max(byTimeStamp).orElse(null);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(newestLogFile==null?null:newestLogFile.getFileName().toString());
-        return newestLogFile==null?null:newestLogFile.getFileName().toString();
+
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(newestLogFile.toFile(), StandardCharsets.UTF_8)))
+        {
+            String line=null;
+
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //return newestLogFile==null?null:newestLogFile.getFileName().toString();
+             return sb.toString();
      }
 
     public static void main(String[] args) {

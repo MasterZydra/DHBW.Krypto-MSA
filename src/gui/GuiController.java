@@ -3,6 +3,7 @@ package gui;
 import commands.ICommand;
 import configuration.Configuration;
 import cqrInterpreter.CqrInterpreter1;
+import logger.LoggerMSA;
 
 public class GuiController {
     private GUI gui;
@@ -42,6 +43,13 @@ public class GuiController {
     }
 
     public void displayLog() {
-        displayText("todo: read latest log");
+        String latestLog = LoggerMSA.getLatestLog();
+        if (latestLog != null && !latestLog.isEmpty()){
+            displayText(latestLog);}
+        else{
+            displayText("Loading latest log: Could not load Logfile!");
+        }
+
+
     }
 }
