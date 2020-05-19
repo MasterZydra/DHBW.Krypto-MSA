@@ -1,10 +1,9 @@
 package configuration;
 
 import cryptography.CryptoAlgorithm;
-import persistence.IMsaDB;
-import persistence.MSA_HSQLDB;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -51,18 +50,8 @@ public enum Configuration {
     public String getKeyFilePath = ud + fs + "keyfiles" + fs;
 
     Configuration() {
-        loadProperties();
-        loadNetworksFromDatabase();
     }
 
-    private void loadNetworksFromDatabase() {
-        IMsaDB db = MSA_HSQLDB.instance;
-        //db.createAllTables();
-        for (CryptoAlgorithm algo: CryptoAlgorithm.values()
-             ) {
-            //db.insertAlgorithm(algo.toString());
-        }
-    }
 
     public String getCryptoAlgorithmPath() {
         String path = componentDirectory;

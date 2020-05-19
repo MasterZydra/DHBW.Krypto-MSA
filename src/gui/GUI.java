@@ -68,7 +68,6 @@ public class GUI extends Application {
         primaryStage.show();
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (keyInput) -> keyPressed(keyInput.getCode()));
-
     }
 
     private void keyPressed(KeyCode keyCode) {
