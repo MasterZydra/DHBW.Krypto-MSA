@@ -1,6 +1,9 @@
 package commands;
 
 import configuration.Configuration;
+import configuration.RuntimeStorage;
+import gui.GuiController;
+import logger.LoggerMSA;
 
 import java.util.List;
 
@@ -14,14 +17,21 @@ public class ShowAlgorithmCommand implements ICommand {
     }
 
     public void execute() {
-        List<String> list = Configuration.instance.getAlgorithmFileNames();
+        LoggerMSA logger = new LoggerMSA("noCryptoAction", "noAlgorithm");
+        logger.log("executing ShowAlgorithmCommand");
+        Configuration cfg = Configuration.instance;
+        GuiController gui = RuntimeStorage.instance.guiController;
+        List<String> list = cfg.getAlgorithmFileNames();
         String output= "";
         for (String algo: list
              ) {
             if(!output.isBlank()) output+=" | ";
             output += algo;
-
+            logger.log("found algo: "+algo);
         }
-        Configuration.runtimeStorage.guiController.displayText(output);
+        gui.displayText(output);
+        logger.log("displayed output:"+output);
+        logger.log("executed ShowAlgorithmCommand");
+
     }
 }
