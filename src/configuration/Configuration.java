@@ -60,7 +60,7 @@ public enum Configuration {
         //db.createAllTables();
         for (CryptoAlgorithm algo: CryptoAlgorithm.values()
              ) {
-            db.insertAlgorithm(algo.toString());
+            //db.insertAlgorithm(algo.toString());
         }
     }
 
