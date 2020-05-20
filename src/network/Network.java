@@ -21,6 +21,7 @@ public class Network implements INetwork {
         this.channels.get(channelName).addParticipant(intruder);
     }
 
+    @Override
     public void sendMessage(String channelName, MessageEvent message) {
         this.channels.get(channelName).sendMessage(message);
     }
