@@ -6,6 +6,7 @@ import persistence.dataModels.Message;
 import persistence.dataModels.Participant;
 import persistence.dataModels.PostboxMessage;
 
+
 import java.sql.*;
 import java.text.MessageFormat;
 import java.time.Instant;
@@ -276,6 +277,7 @@ public enum MSA_HSQLDB implements IMsaDB {
     @Override
     public List<Channel> getChannels() {
         List<Channel> channelList = new ArrayList<>();
+
         try {
             String sqlStatement = "SELECT * from channel";
             Statement statement = connection.createStatement();
@@ -378,7 +380,6 @@ public enum MSA_HSQLDB implements IMsaDB {
         return null;
     }
 
-
     private int getTypeID(String name) {
         try {
             String sqlStatement = "SELECT ID from TYPES where name='" + name + "'";
@@ -412,6 +413,7 @@ public enum MSA_HSQLDB implements IMsaDB {
     private String getParticipantName(int participantID) {
         try {
             String sqlStatement = "SELECT name from participants where ID=" + participantID;
+
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
             if (!resultSet.next()) {
@@ -453,6 +455,7 @@ public enum MSA_HSQLDB implements IMsaDB {
         }
         return -1;
     }
+
 
     private Participant getParticipant(String name) {
         return new Participant(name, getParticipantType(name));

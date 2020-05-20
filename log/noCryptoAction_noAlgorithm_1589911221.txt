@@ -1,0 +1,5 @@
+executing ShowAlgorithmCommand
+found algo: random_jar
+found algo: shift
+displayed output:random_jar | shift
+executed ShowAlgorithmCommand

@@ -1,7 +1,6 @@
 package commands;
 
-
-public class EncryptMessageCommand extends CqrCommand {
+public class RegisterParticipantCommand extends CqrCommand {
 
     @Override
     public void execute() {

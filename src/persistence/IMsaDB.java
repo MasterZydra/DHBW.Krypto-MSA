@@ -1,9 +1,11 @@
 package persistence;
 
+
 import persistence.dataModels.Channel;
 import persistence.dataModels.Message;
 import persistence.dataModels.Participant;
 import persistence.dataModels.PostboxMessage;
+
 
 import java.util.List;
 
@@ -22,6 +24,7 @@ public interface IMsaDB {
     void insertAlgorithm(String algorithmName);
 
     void insertParticipant(String participantName, String type);
+
 
     void insertParticipant(Participant participant);
 
@@ -48,13 +51,16 @@ public interface IMsaDB {
 
     List<Channel> getChannels();
 
+
     boolean channelExists(String channelName);
 
     boolean participantExists(String name);
 
+
     Channel getChannel(String participantA, String participantB);
 
     String getParticipantType(String participantName);
+
 
     void dropChannel(String channelName);
 }

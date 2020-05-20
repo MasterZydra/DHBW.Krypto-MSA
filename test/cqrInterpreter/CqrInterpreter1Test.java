@@ -1,9 +1,7 @@
-package CqrInterpreter;
+package cqrInterpreter;
 
-import main.commands.ICommand;
-import main.commands.ShowAlgorithmCommand;
-import main.cqrInterpreter.CqrInterpreter;
-import main.cqrInterpreter.CqrInterpreter1;
+import commands.ICommand;
+import commands.ShowAlgorithmCommand;
 
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;

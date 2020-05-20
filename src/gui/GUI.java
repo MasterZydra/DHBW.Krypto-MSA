@@ -1,5 +1,8 @@
 package gui;
 
+
+import configuration.Configuration;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -7,12 +10,26 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class GUI extends Application {
+
+    TextArea outputArea;
+    TextArea commandLineArea;
+
+    private GuiController guiController = new GuiController(this);
+
     public void start(Stage primaryStage) {
+
+        Configuration.runtimeStorage.guiController = guiController;
+
+
         primaryStage.setTitle("MSA | Mosbach Security Agency");
 
         HBox hBox = new HBox();
@@ -28,20 +45,22 @@ public class GUI extends Application {
 
         executeButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                System.out.println("---execute  ---");
+                guiController.executeCommand(commandLineArea.getText());
             }
         });
 
         closeButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent actionEvent) {
-                System.exit(0);
+
+                guiController.close();
             }
         });
 
-        TextArea commandLineArea = new TextArea();
+        commandLineArea = new TextArea();
         commandLineArea.setWrapText(true);
 
-        TextArea outputArea = new TextArea();
+        outputArea = new TextArea();
+
         outputArea.setWrapText(true);
         outputArea.setEditable(false);
 
@@ -54,5 +73,29 @@ public class GUI extends Application {
         Scene scene = new Scene(vbox, 950, 500);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, (keyInput) -> keyPressed(keyInput.getCode()));
+    }
+
+    private void keyPressed(KeyCode keyCode) {
+        switch (keyCode) {
+            case F8:
+                guiController.displayLog();
+                break;
+            case F5:
+                guiController.executeCommand(commandLineArea.getText());
+                break;
+            case F3:
+                if (guiController.isLoggingEnabled()) {
+                    guiController.disableLogging();
+                } else {
+                    guiController.enableLogging();
+                }
+                break;
+        }
+    }
+
+    public void displayText(String text) {
+        outputArea.setText(text);
     }
 }

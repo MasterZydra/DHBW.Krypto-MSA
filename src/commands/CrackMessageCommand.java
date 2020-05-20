@@ -1,10 +1,10 @@
 package commands;
 
-
-public class EncryptMessageCommand extends CqrCommand {
+public class CrackMessageCommand extends CqrCommand {
 
     @Override
     public void execute() {
 
     }
 }
+
