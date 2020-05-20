@@ -79,7 +79,7 @@ public class MSA_HSQLDBTest {
             b=""+Instant.now().getEpochSecond();
         }
         db.insertMessage("a", "b", "secondmessage", "rsa", "plainmessage", "fileName2");
-       // assertTrue(db.getMessages("a")!=null);
+        assertTrue(db.getPostboxMessages("a").size()>0);
     }
 
     @Test
