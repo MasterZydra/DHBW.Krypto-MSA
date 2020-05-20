@@ -100,7 +100,8 @@ public enum MSA_HSQLDB implements IMsaDB {
     @Override
     public void insertType(String name) {
         StringBuilder sqlStringBuilder = new StringBuilder();
-        sqlStringBuilder.append("INSERT INTO types (").append("name").append(")");
+        if(getTypeID(name)>0) return;
+        sqlStringBuilder.append("INSERT INTO types (name)");
         sqlStringBuilder.append(" VALUES ");
         sqlStringBuilder.append("(").append("'").append(name).append("'");
         sqlStringBuilder.append(")");
@@ -155,11 +156,13 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     @Override
     public void insertChannel(Channel channel) {
-        insertChannel(channel.getName(), channel.getParticipantA().getName(), channel.getParticipantB().getName());
+        insertChannel(channel.getName(), channel.getParticipantA().getName(),
+                channel.getParticipantB().getName());
     }
 
     @Override
-    public void insertMessage(String participantFrom, String participantTo, String plainMessage, String algorithm, String encodedMessage, String keyFile) {
+    public void insertMessage(String participantFrom, String participantTo, String plainMessage,
+                              String algorithm, String encodedMessage, String keyFile) {
         int participantFromID = getParticipantID(participantFrom);
         int participantToID = getParticipantID(participantTo);
         int algorithmID = getAlgorithmID(algorithm);
@@ -176,7 +179,9 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     @Override
     public void insertMessage(Message message) {
-        insertMessage(message.getParticipantFrom().getName(), message.getParticipantTo().getName(), message.getPlain_message(), message.getAlgorithm(), message.getEncoded_message(), message.getKeyfile());
+        insertMessage(message.getParticipantFrom().getName(), message.getParticipantTo().getName(),
+                message.getPlain_message(), message.getAlgorithm(), message.getEncoded_message(),
+                message.getKeyfile());
     }
 
     @Override
@@ -196,7 +201,8 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     @Override
     public void insertPostboxMessage(PostboxMessage message) {
-
+        insertPostboxMessage(message.getParticipantTo().getName(),
+                message.getParticipantFrom().getName(), message.getMessage());
     }
 
     @Override
@@ -377,7 +383,7 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     private int getTypeID(String name) {
         try {
-            String sqlStatement = "SELECT ID from TYPES where name='" + name + "'";
+            String sqlStatement = "SELECT ID from TYPES where name=lower'" + name + "'";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
             if (!resultSet.next()) {
