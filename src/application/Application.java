@@ -4,11 +4,18 @@ package application;
 import configuration.RuntimeStorage;
 import cryptography.CryptoAlgorithm;
 import gui.GUI;
+import network.INetwork;
+import network.MessageEvent;
+import network.Participant;
+import network.ParticipantDefault;
 import persistence.IMsaDB;
 import persistence.MSA_HSQLDB;
 import persistence.dataModels.Channel;
 
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Application {
     public static void main(String... args) {
@@ -29,6 +36,8 @@ public class Application {
 
     private void loadNetworksFromDatabase() {
         IMsaDB db = MSA_HSQLDB.instance;
+        INetwork net = RuntimeStorage.instance.network;
+        Map<String, Participant> participants = new HashMap<>();
         db.setupConnection();
         List<Channel> channels = db.getChannels();
         db.dropAllTables();
@@ -39,12 +48,21 @@ public class Application {
         }
         for (Channel channel : channels
              ) {
-            db.insertType(channel.getParticipantA().getType());
-            db.insertType(channel.getParticipantB().getType());
-            db.insertParticipant(channel.getParticipantA());
-            db.insertParticipant(channel.getParticipantB());
+            persistence.dataModels.Participant partA = channel.getParticipantA();
+            persistence.dataModels.Participant partB = channel.getParticipantB();
+            //add to DB
+            db.insertType(partA.getType());
+            db.insertType(partB.getType());
+            db.insertParticipant(partA);
+            db.insertParticipant(partB);
             db.insertChannel(channel);
+            //add to network
+            Participant partNetA = participants.computeIfAbsent(partA.getName(), (name)->new ParticipantDefault(name) );
+            Participant partNetB = participants.computeIfAbsent(partB.getName(), (name)->new ParticipantDefault(name) );
+            net.createChannel(channel.getName(), partNetA, partNetB);
         }
         db.shutdown();
+        net.createChannel("testchannel", new ParticipantDefault("tom"), new ParticipantDefault("bom") );
+        net.sendMessage("testchannel", new MessageEvent("tom","testMessage"));
     }
 }
