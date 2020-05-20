@@ -111,6 +111,7 @@ public enum MSA_HSQLDB implements IMsaDB {
     @Override
     public void insertAlgorithm(String algorithmName) {
         StringBuilder sqlStringBuilder = new StringBuilder();
+        if (getAlgorithmID(algorithmName)>0) return;
         sqlStringBuilder.append("INSERT INTO algorithms (").append("name").append(")");
         sqlStringBuilder.append(" VALUES ");
         sqlStringBuilder.append("(").append("'").append(algorithmName).append("'");
@@ -365,14 +366,8 @@ public enum MSA_HSQLDB implements IMsaDB {
                 throw new SQLException(participant + " participant not found");
             }
             typeID = resultSet.getInt("TYPE_ID");
-
-            String sqlStatement2 = "SELECT name from TYPES where ID=" + typeID;
-            Statement statement2 = connection.createStatement();
-            ResultSet resultSet2 = statement2.executeQuery(sqlStatement2);
-            if (!resultSet2.next()) {
-                throw new SQLException(typeID + " typeID not found");
-            }
-            return resultSet2.getString("name");
+            String typeName = getTypeName(typeID);
+            return typeName;
 
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
@@ -443,7 +438,7 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     private int getAlgorithmID(String algorithm) {
         try {
-            String sqlStatement = "SELECT ID from ALGORITHMS where name='" + algorithm + "'";
+            String sqlStatement = "SELECT ID from ALGORITHMS where UPPER(name)=UPPER('" + algorithm + ")'";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
             if (!resultSet.next()) {
