@@ -26,5 +26,6 @@ public class ShowAlgorithmCommand extends CqrCommand {
         gui.displayText(output);
         logger.log("displayed output:"+output);
         logger.log("executed ShowAlgorithmCommand");
+
     }
 }

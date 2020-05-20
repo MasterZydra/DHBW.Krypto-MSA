@@ -20,4 +20,5 @@ public class CommandFactory {
     public static ICommand getRegisterParticipantCommand() {
         return new RegisterParticipantCommand();
     }
+
 }

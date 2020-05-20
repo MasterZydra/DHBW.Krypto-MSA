@@ -26,12 +26,14 @@ public enum Configuration {
 
     // database
     public final String dataDirectory = ud + fs + "hsqldb" + fs;
+
     public final String databaseFile = dataDirectory + "datastore.db";
     public final String driverName = "jdbc:hsqldb:";
     public final String username = "sa";
     public final String password = "";
 
     // component
+
     public String componentDirectory = ud + fs + "component";
 
     // logger
@@ -121,4 +123,5 @@ public enum Configuration {
     public void disableLogging() {
         loggingEnabled = false;
     }
+
 }

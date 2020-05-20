@@ -1,5 +1,6 @@
 package commands;
 
+
 public class EncryptMessageCommand extends CqrCommand {
 
     @Override

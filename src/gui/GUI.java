@@ -1,6 +1,8 @@
 package gui;
 
+
 import configuration.Configuration;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,8 +10,10 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -24,6 +28,7 @@ public class GUI extends Application {
     public void start(Stage primaryStage) {
 
         Configuration.runtimeStorage.guiController = guiController;
+
 
         primaryStage.setTitle("MSA | Mosbach Security Agency");
 
@@ -46,6 +51,7 @@ public class GUI extends Application {
 
         closeButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent actionEvent) {
+
                 guiController.close();
             }
         });
@@ -54,6 +60,7 @@ public class GUI extends Application {
         commandLineArea.setWrapText(true);
 
         outputArea = new TextArea();
+
         outputArea.setWrapText(true);
         outputArea.setEditable(false);
 
