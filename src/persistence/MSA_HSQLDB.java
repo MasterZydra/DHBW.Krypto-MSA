@@ -383,7 +383,7 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     private int getTypeID(String name) {
         try {
-            String sqlStatement = "SELECT ID from TYPES where name=lower'" + name + "'";
+            String sqlStatement = "SELECT ID from TYPES where lower(name)=lower('" + name + "')";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
             if (!resultSet.next()) {
@@ -444,7 +444,7 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     private int getAlgorithmID(String algorithm) {
         try {
-            String sqlStatement = "SELECT ID from ALGORITHMS where UPPER(name)=UPPER('" + algorithm + ")'";
+            String sqlStatement = "SELECT ID from ALGORITHMS where UPPER(name)=UPPER('" + algorithm + "')";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
             if (!resultSet.next()) {
