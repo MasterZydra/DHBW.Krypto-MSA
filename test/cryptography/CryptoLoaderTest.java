@@ -10,58 +10,19 @@ import java.util.Scanner;
 public class CryptoLoaderTest {
     public static void main(String[] args) {
         CryptoLoader loader = new CryptoLoader();
-        Configuration.instance.cryptoAlgorithm = CryptoAlgorithm.Shift;
-        loader.createCryptographyMethod(CryptoMethod.ENCRYPT);
+        loader.createCryptographyMethod(CryptoAlgorithm.Shift, CryptoMethod.ENCRYPT);
 
-        Method method = loader.getCryptoMethod();
-        File file = new File(Configuration.instance.getKeyFilePath + "shift.json");
-
-        int key = getKey(file);
-
-        String res;
         try {
-            encryptMessage("abcde", file);
-            res = (String) method.invoke(loader.getPort(),  "abz", file);
+            Method method = loader.getCryptoMethod();
+            File file = new File(Configuration.instance.getKeyFilePath + "shift.json");
+            String encrypted = (String) method.invoke(loader.getPort(),  "Hallo wie geht es Ihnen heute?", file); // "Lepps${mi$kilx$iw$Mlrir$liyxiC", file);//
+
+            loader.createCrackerMethod(CryptoAlgorithm.Shift);
+            method = loader.getCryptoMethod();
+            String decrypted = (String) method.invoke(loader.getPort(),  encrypted);
+            System.out.println(decrypted);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private static String encryptMessage(String plainMessage, File keyfile) {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for (int i = 0; i < plainMessage.length(); i++) {
-            char character = (char) (plainMessage.codePointAt(i) + getKey(keyfile));
-            stringBuilder.append(character);
-        }
-
-        return stringBuilder.toString();
-    }
-
-    private static int getKey(File keyfile) {
-        /*
-        Example:
-        {
-	        "key": 4
-        }
-         */
-        try {
-            Scanner scanner = new Scanner(keyfile);
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                if (line.contains("\"key\":")) {
-                    String[] lineParts = line.split(":");
-                    line = lineParts[1].trim();
-                    try {
-                        return Integer.parseInt(line);
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        }
-        return 0;
     }
 }
