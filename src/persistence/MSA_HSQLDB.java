@@ -1,6 +1,11 @@
 package persistence;
 
 import configuration.Configuration;
+import persistence.dataModels.Channel;
+import persistence.dataModels.Message;
+import persistence.dataModels.Participant;
+import persistence.dataModels.PostboxMessage;
+
 
 import java.sql.*;
 import java.text.MessageFormat;
@@ -128,6 +133,11 @@ public enum MSA_HSQLDB implements IMsaDB {
     }
 
     @Override
+    public void insertParticipant(Participant participant) {
+        insertParticipant(participant.getName(), participant.getType());
+    }
+
+    @Override
     public void insertChannel(String channelName, String participantA, String participantB) {
         int participantA_ID = getParticipantID(participantA);
         int participantB_ID = getParticipantID(participantB);
@@ -140,6 +150,11 @@ public enum MSA_HSQLDB implements IMsaDB {
         sqlStringBuilder.append(")");
         System.out.println("sqlStringBuilder : " + sqlStringBuilder.toString());
         update(sqlStringBuilder.toString());
+    }
+
+    @Override
+    public void insertChannel(Channel channel) {
+        insertChannel(channel.getName(), channel.getParticipantA().getName(), channel.getParticipantB().getName());
     }
 
     @Override
@@ -159,6 +174,11 @@ public enum MSA_HSQLDB implements IMsaDB {
     }
 
     @Override
+    public void insertMessage(Message message) {
+        insertMessage(message.getParticipantFrom().getName(), message.getParticipantTo().getName(), message.getPlain_message(), message.getAlgorithm(), message.getEncoded_message(), message.getKeyfile());
+    }
+
+    @Override
     public void insertPostboxMessage(String participantTo, String participantFrom, String message) {
         int participantFromID = getParticipantID(participantFrom);
         int participantToID = getParticipantID(participantTo);
@@ -173,55 +193,106 @@ public enum MSA_HSQLDB implements IMsaDB {
         update(sqlStringBuilder.toString());
     }
 
+    @Override
+    public void insertPostboxMessage(PostboxMessage message) {
+
+    }
 
     @Override
-    public List<String> getPostboxMessages(String participant) {
-        List<String> msgList = new ArrayList<>();
-        int partToID = getParticipantID(participant);
+    public List<String> getTypes() {
+        List<String> types = new ArrayList<>();
+        try {
+            String sqlStatement = "SELECT * from TYPES";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlStatement);
+            while (resultSet.next()) {
+                types.add(resultSet.getString("name"));
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+        return types;
+    }
+
+    @Override
+    public List<String> getAlgorithms() {
+        List<String> algos = new ArrayList<>();
+        try {
+            String sqlStatement = "SELECT * from ALGORITHMS";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlStatement);
+            while (resultSet.next()) {
+                algos.add(resultSet.getString("name"));
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+        return algos;
+    }
+
+    @Override
+    public List<Participant> getParticipants() {
+        List<Participant> participants = new ArrayList<>();
+        try {
+            String sqlStatement = "SELECT * from PARTICIPANTS";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlStatement);
+            while (resultSet.next()) {
+                String name = resultSet.getString("name");
+                String type = getTypeName(resultSet.getInt("type_id"));
+                Participant p = new Participant(name, type);
+                participants.add(p);
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+        return participants;
+    }
+
+
+    @Override
+    public List<PostboxMessage> getPostboxMessages(String partToName) {
+        List<PostboxMessage> msgList = new ArrayList<>();
+        int partToID = getParticipantID(partToName);
         try {
             String sqlStatement = "SELECT * from POSTBOX where PARTICIPANT_TO_ID=" + partToID;
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
             while (resultSet.next()) {
-                StringBuilder sb = new StringBuilder();
                 int partFromID = resultSet.getInt("participant_from_id");
                 String partFromName = getParticipantName(partFromID);
-                sb.append("--- ").append(partFromName).append(" ---\n");
-                sb.append(resultSet.getString("message"));
-                sb.append("\n--- ").append(resultSet.getInt("timestamp")).append(" ---");
-                msgList.add(sb.toString());
+                Participant partFrom = new Participant(partFromName, getParticipantType(partFromName));
+                Participant partTo = new Participant(partToName, getParticipantType(partToName));
+                String timestamp = Integer.toString(resultSet.getInt("timestamp"));
+                String message = resultSet.getString("message");
+                PostboxMessage p = new PostboxMessage(partFrom, partTo, message, timestamp);
+                msgList.add(p);
             }
-            return msgList;
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
         }
-        return null;
-
+        return msgList;
     }
 
     @Override
-    public List<String> getChannels() {
-        List<String> channelList = new ArrayList<>();
+    public List<Channel> getChannels() {
+        List<Channel> channelList = new ArrayList<>();
+
         try {
             String sqlStatement = "SELECT * from channel";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
             while (resultSet.next()) {
-                StringBuilder sb = new StringBuilder();
-                int part1 = resultSet.getInt("participant_01");
-                int part2 = resultSet.getInt("participant_02");
-                String part1Name = getParticipantName(part1);
-                String part2Name = getParticipantName(part2);
-                sb.append(resultSet.getString("name")).append(" | ");
-                sb.append(part1Name).append(" and ");
-                sb.append(part2Name);
-                channelList.add(sb.toString());
+                int part1ID = resultSet.getInt("participant_01");
+                int part2ID = resultSet.getInt("participant_02");
+                Participant partA = getParticipant(part1ID);
+                Participant partB = getParticipant(part2ID);
+                channelList.add(getChannel(partA.getName(), partB.getName()));
             }
-            return channelList;
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
         }
-        return null;
+        return channelList;
     }
 
     @Override
@@ -247,7 +318,7 @@ public enum MSA_HSQLDB implements IMsaDB {
     }
 
     @Override
-    public String getChannel(String participantA, String participantB) {
+    public Channel getChannel(String participantA, String participantB) {
         try {
             int participantAID = getParticipantID(participantA);
             int participantBID = getParticipantID(participantB);
@@ -259,7 +330,8 @@ public enum MSA_HSQLDB implements IMsaDB {
             if (!resultSet.next()) {
                 throw new SQLException(" channel not found with participants " + participantA + " " + participantB);
             }
-            return resultSet.getString("name");
+            String channelName = resultSet.getString("name");
+            return new Channel(channelName, getParticipant(participantA), getParticipant(participantB));
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
         }
@@ -308,9 +380,6 @@ public enum MSA_HSQLDB implements IMsaDB {
         return null;
     }
 
-
-
-
     private int getTypeID(String name) {
         try {
             String sqlStatement = "SELECT ID from TYPES where name='" + name + "'";
@@ -343,11 +412,27 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     private String getParticipantName(int participantID) {
         try {
-            String sqlStatement = "SELECT name from participants where ID="+participantID;
+            String sqlStatement = "SELECT name from participants where ID=" + participantID;
+
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
             if (!resultSet.next()) {
                 throw new SQLException(" participant not found with ID " + participantID);
+            }
+            return resultSet.getString("name");
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+        return null;
+    }
+
+    private String getTypeName(int typeID) {
+        try {
+            String sqlStatement = "SELECT name from TYPES where ID=" + typeID;
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlStatement);
+            if (!resultSet.next()) {
+                throw new SQLException(" type not found with ID " + typeID);
             }
             return resultSet.getString("name");
         } catch (SQLException sqle) {
@@ -369,6 +454,40 @@ public enum MSA_HSQLDB implements IMsaDB {
             System.out.println(sqle.getMessage());
         }
         return -1;
+    }
+
+
+    private Participant getParticipant(String name) {
+        return new Participant(name, getParticipantType(name));
+    }
+
+    private Participant getParticipant(int partID) {
+        String name = getParticipantName(partID);
+        return new Participant(name, getParticipantType(name));
+    }
+
+    public List<String> getChannelsToString() {
+        List<String> channelList = new ArrayList<>();
+        try {
+            String sqlStatement = "SELECT * from channel";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlStatement);
+            while (resultSet.next()) {
+                StringBuilder sb = new StringBuilder();
+                int part1 = resultSet.getInt("participant_01");
+                int part2 = resultSet.getInt("participant_02");
+                String part1Name = getParticipantName(part1);
+                String part2Name = getParticipantName(part2);
+                sb.append(resultSet.getString("name")).append(" | ");
+                sb.append(part1Name).append(" and ");
+                sb.append(part2Name);
+                channelList.add(sb.toString());
+            }
+            return channelList;
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+        return null;
     }
 
 

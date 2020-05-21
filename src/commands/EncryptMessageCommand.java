@@ -1,19 +1,9 @@
 package commands;
 
-import java.util.HashMap;
-import java.util.Map;
 
-public class EncryptMessageCommand implements ICommand {
-    private Map<String, String> params = new HashMap();
+public class EncryptMessageCommand extends CqrCommand {
 
-    public void setParam(String name, String value) {
-        this.params.put(name, value);
-    }
-
-    public String getParam(String name) {
-        return this.params.get(name);
-    }
-
+    @Override
     public void execute() {
 
     }
