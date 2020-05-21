@@ -23,11 +23,14 @@ public class GUI extends Application {
     TextArea outputArea;
     TextArea commandLineArea;
 
-    private GuiController guiController = new GuiController(this);
+    private GuiController guiController;
 
     public void start(Stage primaryStage) {
 
-        Configuration.runtimeStorage.guiController = guiController;
+        guiController = new GuiController(this);
+
+
+        Configuration.runtimeStorage.instance.guiController = guiController;
 
 
         primaryStage.setTitle("MSA | Mosbach Security Agency");
