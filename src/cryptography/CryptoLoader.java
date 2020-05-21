@@ -27,6 +27,22 @@ public class CryptoLoader {
         }
     }
 
+    public void createCrackerMethod(CryptoAlgorithm cryptoAlgorithm) {
+        Object instance;
+        try {
+            URL[] urls = {new File(Configuration.instance.getCrackerPath(cryptoAlgorithm)).toURI().toURL()};
+            URLClassLoader urlClassLoader = new URLClassLoader(urls, CryptoLoader.class.getClassLoader());
+            Class clazz = Class.forName(cryptoAlgorithm.toString() + "Cracker", true, urlClassLoader);
+
+            instance = clazz.getMethod("getInstance").invoke(null);
+            port = clazz.getDeclaredField("port").get(instance);
+            cryptoMethod = port.getClass().getMethod(CryptoMethod.DECRYPT.toString().toLowerCase(), String.class);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public Object getPort() {
         return port;
     }
