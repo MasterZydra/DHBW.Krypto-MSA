@@ -11,12 +11,12 @@ public class CryptoLoader {
     private Object port;
     private Method cryptoMethod;
 
-    public void createCryptographyMethod(CryptoMethod method) {
+    public void createCryptographyMethod(CryptoAlgorithm cryptoAlgorithm, CryptoMethod method) {
         Object instance;
         try {
-            URL[] urls = {new File(Configuration.instance.getCryptoAlgorithmPath()).toURI().toURL()};
+            URL[] urls = {new File(Configuration.instance.getCryptoAlgorithmPath(cryptoAlgorithm)).toURI().toURL()};
             URLClassLoader urlClassLoader = new URLClassLoader(urls, CryptoLoader.class.getClassLoader());
-            Class clazz = Class.forName(Configuration.instance.cryptoAlgorithm.toString(), true, urlClassLoader);
+            Class clazz = Class.forName(cryptoAlgorithm.toString(), true, urlClassLoader);
 
             instance = clazz.getMethod("getInstance").invoke(null);
             port = clazz.getDeclaredField("port").get(instance);
