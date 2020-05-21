@@ -5,8 +5,6 @@ import cryptography.CryptoAlgorithm;
 public enum Configuration {
     instance;
 
-    public CryptoAlgorithm cryptoAlgorithm = CryptoAlgorithm.RSA;
-
     // common
     public final String ud = System.getProperty("user.dir");
     public final String fs = System.getProperty("file.separator");
@@ -21,7 +19,7 @@ public enum Configuration {
     // component
     public String componentDirectory = ud + fs + "component";
 
-    public String getCryptoAlgorithmPath() {
+    public String getCryptoAlgorithmPath(CryptoAlgorithm cryptoAlgorithm) {
         String path = componentDirectory;
         switch (cryptoAlgorithm) {
             case RSA:
@@ -29,6 +27,21 @@ public enum Configuration {
                 break;
             case Shift:
                 path += fs + cryptoAlgorithm.toString().toLowerCase() + fs + "jar" + fs + "Shift.jar";
+                break;
+            default:
+                path = "ERROR";
+        }
+        return path;
+    }
+
+    public String getCrackerPath(CryptoAlgorithm cryptoAlgorithm) {
+        String path = componentDirectory;
+        switch (cryptoAlgorithm) {
+            case RSA:
+                path += fs + cryptoAlgorithm.toString().toLowerCase() + "_cracker" + fs + "jar" + fs + "RSACracker.jar";
+                break;
+            case Shift:
+                path += fs + cryptoAlgorithm.toString().toLowerCase() + "_cracker" + fs + "jar" + fs + "ShiftCracker.jar";
                 break;
             default:
                 path = "ERROR";
