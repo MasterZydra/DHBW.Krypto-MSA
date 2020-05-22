@@ -2,7 +2,6 @@ package gui;
 
 import commands.ICommand;
 import configuration.Configuration;
-import cqrInterpreter.CqrInterpreter1;
 import logger.LoggerMSA;
 
 public class GuiController {
@@ -39,7 +38,7 @@ public class GuiController {
     }
 
     public boolean isLoggingEnabled() {
-        return cfg.loggingEnabled;
+        return LoggerMSA.isLoggingEnabled();
     }
 
     public void displayLog() {

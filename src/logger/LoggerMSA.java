@@ -18,7 +18,7 @@ public class LoggerMSA {
 
     static private Configuration cfg = Configuration.instance;
     static private String logDirectory = cfg.logDirectory;
-    private boolean loggingEnabled = cfg.loggingEnabled;
+    static private boolean loggingEnabled = false;
     private File logFile = null;
 
     public LoggerMSA(String cryptographyActionType, String algorithm) {
@@ -91,5 +91,13 @@ public class LoggerMSA {
         LoggerMSA lt = new LoggerMSA("encode", "none");
         lt.log("logger custom message!");
         System.out.println("latest: "+LoggerMSA.getLatestLog());
+    }
+
+    public static boolean isLoggingEnabled() {
+        return loggingEnabled;
+    }
+
+    public static void setLoggingEnabled(boolean loggingEnabled) {
+        LoggerMSA.loggingEnabled = loggingEnabled;
     }
 }
