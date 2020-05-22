@@ -39,18 +39,7 @@ public class Application {
         INetwork net = RuntimeStorage.instance.network;
         Map<String, Participant> participants = new HashMap<>();
         db.setupConnection();
-        //add example data
-        db.insertType("normal");
-        db.insertType("intruder");
-        db.insertAlgorithm("none");
-        db.insertAlgorithm("rsa");
-        db.insertAlgorithm("shift");
-        db.insertParticipant("a", "normal");
-        db.insertParticipant("b", "normal");
-        db.insertParticipant("c", "intruder");
-        db.insertChannel("channel1", "a", "b");
-        db.insertMessage("a", "b", "plainmessage", "none", "plainmessage", "keyfileName");
-
+        populateDatabase(db);
         List<Channel> channels = db.getChannels();
         db.dropAllTables();
         db.createAllTables();
@@ -78,5 +67,18 @@ public class Application {
         db.shutdown();
         net.sendMessage("channel1",new MessageEvent("a","message on channel1"));
 
+    }
+
+    private void populateDatabase(IMsaDB db) {
+        //add example data
+        db.insertType("normal");
+        db.insertType("intruder");
+        db.insertAlgorithm("rsa");
+        db.insertAlgorithm("shift");
+        db.insertParticipant("a", "normal");
+        db.insertParticipant("b", "normal");
+        db.insertParticipant("c", "intruder");
+        db.insertChannel("channel1", "a", "b");
+        db.insertMessage("a", "b", "plainmessage", "none", "plainmessage", "keyfileName");
     }
 }
