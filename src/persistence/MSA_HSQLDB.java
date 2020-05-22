@@ -458,8 +458,11 @@ public enum MSA_HSQLDB implements IMsaDB {
     }
 
 
-    private Participant getParticipant(String name) {
-        return new Participant(name, getParticipantType(name));
+    public Participant getParticipant(String name) {
+        if (participantExists(name)) {
+            return new Participant(name, getParticipantType(name));
+        }
+        return null;
     }
 
     private Participant getParticipant(int partID) {

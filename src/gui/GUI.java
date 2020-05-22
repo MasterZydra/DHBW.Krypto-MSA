@@ -29,9 +29,7 @@ public class GUI extends Application {
 
         guiController = new GuiController(this);
 
-
         Configuration.runtimeStorage.instance.guiController = guiController;
-
 
         primaryStage.setTitle("MSA | Mosbach Security Agency");
 
@@ -54,7 +52,6 @@ public class GUI extends Application {
 
         closeButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent actionEvent) {
-
                 guiController.close();
             }
         });
@@ -95,6 +92,8 @@ public class GUI extends Application {
                     guiController.enableLogging();
                 }
                 break;
+            case F9:
+                commandLineArea.setText("send message \"[message]\" from a to b using Shift and keyfile shift.json");
         }
     }
 

@@ -2,6 +2,7 @@ package gui;
 
 import commands.ICommand;
 import configuration.Configuration;
+import configuration.RuntimeStorage;
 import logger.LoggerMSA;
 
 public class GuiController {
@@ -22,7 +23,7 @@ public class GuiController {
 
 
     public void executeCommand(String commandText) {
-        ICommand command = cfg.runtimeStorage.cqrInterpreterCoR.interpret(commandText);
+        ICommand command = RuntimeStorage.instance.cqrInterpreterCoR.interpret(commandText);
         if(command!=null) {
             command.execute();
         }

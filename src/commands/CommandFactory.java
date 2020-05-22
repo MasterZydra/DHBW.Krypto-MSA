@@ -21,4 +21,7 @@ public class CommandFactory {
         return new RegisterParticipantCommand();
     }
 
+    public static ICommand sendMessageP2PCommand() {
+        return new SendMessageP2PCommand();
+    }
 }

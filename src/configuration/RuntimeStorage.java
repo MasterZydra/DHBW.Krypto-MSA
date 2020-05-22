@@ -10,9 +10,17 @@ public enum RuntimeStorage {
     instance;
 
     public gui.GuiController guiController;
-    public IMsaDB db = MSA_HSQLDB.instance;
-    public Configuration cfg = Configuration.instance;
-    public INetwork network = new Network();
+    public IMsaDB db;
+    public Configuration cfg ;
+    public INetwork network ;
     public CqrInterpreter cqrInterpreterCoR;
 
+    RuntimeStorage() {
+    }
+
+    public void init(){
+        db = MSA_HSQLDB.instance;
+        cfg = Configuration.instance;
+        network = new Network();
+    }
 }

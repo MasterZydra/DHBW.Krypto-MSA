@@ -19,29 +19,35 @@ import java.util.Map;
 
 public class Application {
     public static void main(String... args) {
-        IMsaDB db = MSA_HSQLDB.instance;
         RuntimeStorage runtimeStorage = RuntimeStorage.instance;
+        runtimeStorage.init();
+        IMsaDB db = MSA_HSQLDB.instance;
         INetwork net = runtimeStorage.network;
-        CqrInterpreter cqrCoR = runtimeStorage.cqrInterpreterCoR;
+        System.out.println("test:" +runtimeStorage);
         Application a = new Application();
         a.init();
         a.startGui();
+        a.close();
+    }
+
+    public void init(){
+        MSA_HSQLDB.instance.setupConnection();
+        loadNetworksFromDatabase();
+        RuntimeStorage.instance.cqrInterpreterCoR =  createInterpreterCoR();
     }
 
     private void startGui() {
         javafx.application.Application.launch(GUI.class);
     }
 
-    public void init(){
-        loadNetworksFromDatabase();
-        RuntimeStorage.instance.cqrInterpreterCoR =  createInterpreterCoR();
+    private void close() {
+        MSA_HSQLDB.instance.shutdown();
     }
 
     private void loadNetworksFromDatabase() {
         IMsaDB db = MSA_HSQLDB.instance;
         INetwork net = RuntimeStorage.instance.network;
         Map<String, Participant> participants = new HashMap<>();
-        db.setupConnection();
         populateDatabase(db);
         List<Channel> channels = db.getChannels();
         db.dropAllTables();
@@ -67,7 +73,6 @@ public class Application {
             Participant partNetB = participants.computeIfAbsent(partB.getName(), (name)->new ParticipantDefault(name) );
             net.createChannel(channel.getName(), partNetA, partNetB);
         }
-        db.shutdown();
         net.sendMessage("channel1",new MessageEvent("a","message on channel1"));
 
     }

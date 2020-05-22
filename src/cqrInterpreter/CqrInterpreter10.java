@@ -2,6 +2,8 @@ package cqrInterpreter;
 
 import commands.CommandFactory;
 import commands.ICommand;
+import configuration.RuntimeStorage;
+import gui.GuiController;
 
 public class CqrInterpreter10 extends CqrInterpreter{
     private String participantFrom;
@@ -37,7 +39,7 @@ public class CqrInterpreter10 extends CqrInterpreter{
     @Override
     public ICommand interpret(String cqr) {
         String cqrTrans = this.transformCqrString(cqr);
-
+        GuiController gui = RuntimeStorage.instance.guiController;
         if (canHandleCQR(cqrTrans, "send message")) {
             int firstQuote = cqr.indexOf("\"");
             int lastQuote = cqr.lastIndexOf("\"");
@@ -47,7 +49,7 @@ public class CqrInterpreter10 extends CqrInterpreter{
                 String partAfterQuotes = cqr.substring(lastQuote + 1);
 
                 if(this.getParams(partAfterQuotes)) {
-                    ICommand command = CommandFactory.getEncryptMessageCommand();
+                    ICommand command = CommandFactory.sendMessageP2PCommand();
                     command.setParam("message", message);
                     command.setParam("participantFrom", participantFrom);
                     command.setParam("participantTo", participantTo);
@@ -57,7 +59,7 @@ public class CqrInterpreter10 extends CqrInterpreter{
                 }
             }
             //todo: send to GuiController instead of command line
-            System.out.println("Syntax error: 'send message \"[message]\" from [participant] to [participant] using [algorithm] and keyfile [filename]' expected");
+            gui.displayText("Syntax error: 'send message \"[message]\" from [participant] to [participant] using [algorithm] and keyfile [filename]' expected");
             return null;
         }
         else
