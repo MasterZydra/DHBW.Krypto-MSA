@@ -1,5 +1,6 @@
 package configuration;
 
+import cqrInterpreter.CqrInterpreter;
 import network.INetwork;
 import network.Network;
 import persistence.IMsaDB;
@@ -12,5 +13,6 @@ public enum RuntimeStorage {
     public IMsaDB db = MSA_HSQLDB.instance;
     public Configuration cfg = Configuration.instance;
     public INetwork network = new Network();
+    public CqrInterpreter cqrInterpreterCoR;
 
 }

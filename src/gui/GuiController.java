@@ -22,8 +22,10 @@ public class GuiController {
 
 
     public void executeCommand(String commandText) {
-        ICommand command = (new CqrInterpreter1(null)).interpret(commandText);
-        if(command!=null) command.execute();
+        ICommand command = cfg.runtimeStorage.cqrInterpreterCoR.interpret(commandText);
+        if(command!=null) {
+            command.execute();
+        }
     }
 
     public void disableLogging(){
