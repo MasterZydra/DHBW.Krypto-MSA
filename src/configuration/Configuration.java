@@ -90,13 +90,6 @@ public enum Configuration {
             System.out.println("Could not load config.properties");
             e.printStackTrace();
         }
-        algorithm = props.getProperty("algorithm");
-        for (CryptoAlgorithm algo: CryptoAlgorithm.values()
-             ) {
-            if (algorithm.equalsIgnoreCase(algo.toString())){
-                cryptoAlgorithm = algo;
-            }
-        }
         try {
             crackingMaxSeconds = Integer.parseInt(props.getProperty("crackingMaxSeconds"));
         } catch (NumberFormatException e) {
