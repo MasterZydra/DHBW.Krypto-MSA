@@ -2,6 +2,7 @@ package application;
 
 
 import configuration.RuntimeStorage;
+import cqrInterpreter.*;
 import cryptography.CryptoAlgorithm;
 import gui.GUI;
 import network.INetwork;
@@ -21,6 +22,7 @@ public class Application {
         IMsaDB db = MSA_HSQLDB.instance;
         RuntimeStorage runtimeStorage = RuntimeStorage.instance;
         INetwork net = runtimeStorage.network;
+        CqrInterpreter cqrCoR = runtimeStorage.cqrInterpreterCoR;
         Application a = new Application();
         a.init();
         a.startGui();
@@ -32,6 +34,7 @@ public class Application {
 
     public void init(){
         loadNetworksFromDatabase();
+        RuntimeStorage.instance.cqrInterpreterCoR =  createInterpreterCoR();
     }
 
     private void loadNetworksFromDatabase() {
@@ -80,5 +83,10 @@ public class Application {
         db.insertParticipant("c", "intruder");
         db.insertChannel("channel1", "a", "b");
         db.insertMessage("a", "b", "plainmessage", "none", "plainmessage", "keyfileName");
+    }
+
+    CqrInterpreter createInterpreterCoR(){
+        CqrInterpreter10 cqr10 = new CqrInterpreter10(null);
+        return new CqrInterpreter1(cqr10);
     }
 }
