@@ -32,7 +32,8 @@ public class Shift {
         StringBuilder stringBuilder = new StringBuilder();
 
         for (int i = 0; i < plainMessage.length(); i++) {
-            char character = (char) (plainMessage.codePointAt(i) + key);
+            char character = (char) plainMessage.codePointAt(i);
+            character = shiftChar(character, key);
             stringBuilder.append(character);
         }
 
@@ -44,11 +45,32 @@ public class Shift {
         StringBuilder stringBuilder = new StringBuilder();
 
         for (int i = 0; i < encryptedMessage.length(); i++) {
-            char character = (char) (encryptedMessage.codePointAt(i) - key);
+            char character = (char) encryptedMessage.codePointAt(i);
+            character = shiftChar(character, -key);
             stringBuilder.append(character);
         }
 
         return stringBuilder.toString();
+    }
+
+    private char shiftChar(char character, int shiftKey) {
+        int offSet = 0;
+        if (character > 64 && character < 91)
+            offSet = 65;
+        else if (character > 96 && character < 123)
+            offSet = 97;
+
+        if (offSet != 0) {
+            if (shiftKey > 0)
+                character = (char) (((int) character + shiftKey - offSet) % 26 + offSet);
+            else {
+                character = (char) ((int) character + shiftKey - offSet);
+                int mul = Math.abs(character) / 26;
+                character = (char) ((int) character + 26 * mul);
+                character = (char) ((int) character % 26 + offSet);
+            }
+        }
+        return character;
     }
 
     private void getKey(File keyfile) {
