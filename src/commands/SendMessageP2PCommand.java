@@ -12,7 +12,6 @@ import network.MessageEvent;
 import persistence.IMsaDB;
 import persistence.dataModels.Channel;
 import persistence.dataModels.Message;
-import persistence.dataModels.Participant;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -40,17 +39,17 @@ public class SendMessageP2PCommand extends CqrCommand {
                     + " and "+getParam("participantTo"));
             return;
         }
+
         String nameFrom = getParam("participantFrom");
         String nameTo = getParam("participantTo");
 
         CryptoLoader loader = new CryptoLoader();
         try {
-            loader.createCryptographyMethod(CryptoAlgorithm.valueOf(getParam("algorithm")), CryptoMethod.ENCRYPT);
+            loader.createCryptographyMethod(CryptoAlgorithm.valueOfCaseIgnore(getParam("algorithm")), CryptoMethod.ENCRYPT);
             Method method = loader.getCryptoMethod();
             File file = new File(Configuration.instance.getKeyFilePath + getParam("keyfile"));
             String encrypted = (String) method.invoke(loader.getPort(),  getParam("message"), file);
-            net.sendMessage(channel.getName(), new MessageEvent(nameTo, encrypted));
-            Participant participantFrom;
+            net.sendMessage(channel.getName(), new MessageEvent(nameFrom, nameTo, encrypted, getParam("algorithm"),getParam("keyfile")));
             Message msg = new Message(
                     db.getParticipant(nameFrom),
                     db.getParticipant(nameTo),

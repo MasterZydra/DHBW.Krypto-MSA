@@ -14,7 +14,9 @@ public class GuiController {
     }
 
     public void displayText(String text){
-        gui.displayText(text);
+        StringBuilder sb = new StringBuilder();
+        sb.append(gui.getDisplayedText()).append("\"").append(text);
+        gui.displayText(sb.toString());
     }
 
     public void close() {
@@ -37,7 +39,6 @@ public class GuiController {
     public void enableLogging(){
         displayText("logging on");
         cfg.enableLogging();
-
     }
 
     public boolean isLoggingEnabled() {
@@ -47,11 +48,11 @@ public class GuiController {
     public void displayLog() {
         String latestLog = LoggerMSA.getLatestLog();
         if (latestLog != null && !latestLog.isEmpty()){
-            displayText(latestLog);}
+            gui.clearText();
+            displayText(latestLog);
+        }
         else{
             displayText("Loading latest log: Could not load Logfile!");
         }
-
-
     }
 }

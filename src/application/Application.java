@@ -2,11 +2,9 @@ package application;
 
 
 import configuration.RuntimeStorage;
-import cqrInterpreter.*;
 import cryptography.CryptoAlgorithm;
 import gui.GUI;
 import network.INetwork;
-import network.MessageEvent;
 import network.Participant;
 import network.ParticipantDefault;
 import persistence.IMsaDB;
@@ -33,7 +31,7 @@ public class Application {
     public void init(){
         MSA_HSQLDB.instance.setupConnection();
         loadNetworksFromDatabase();
-        RuntimeStorage.instance.cqrInterpreterCoR =  createInterpreterCoR();
+        //RuntimeStorage.instance.cqrInterpreterCoR =  createInterpreterCoR();
     }
 
     private void startGui() {
@@ -73,7 +71,7 @@ public class Application {
             Participant partNetB = participants.computeIfAbsent(partB.getName(), (name)->new ParticipantDefault(name) );
             net.createChannel(channel.getName(), partNetA, partNetB);
         }
-        net.sendMessage("channel1",new MessageEvent("a","message on channel1"));
+
 
     }
 
@@ -90,8 +88,4 @@ public class Application {
         db.insertMessage("a", "b", "plainmessage", "none", "plainmessage", "keyfileName");
     }
 
-    CqrInterpreter createInterpreterCoR(){
-        CqrInterpreter10 cqr10 = new CqrInterpreter10(null);
-        return new CqrInterpreter1(cqr10);
-    }
 }

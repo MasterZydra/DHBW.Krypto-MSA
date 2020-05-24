@@ -100,4 +100,12 @@ public class GUI extends Application {
     public void displayText(String text) {
         outputArea.setText(text);
     }
+
+    public String getDisplayedText() {
+        return outputArea.getText();
+    }
+
+    public void clearText() {
+        outputArea.setText("");
+    }
 }
