@@ -15,7 +15,10 @@ public class GuiController {
 
     public void displayText(String text){
         StringBuilder sb = new StringBuilder();
-        sb.append(gui.getDisplayedText()).append("\"").append(text);
+        if (!gui.getDisplayedText().isBlank()) {
+            sb.append(gui.getDisplayedText()).append("\n");
+        }
+        sb.append(text);
         gui.displayText(sb.toString());
     }
 

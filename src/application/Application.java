@@ -31,7 +31,6 @@ public class Application {
     public void init(){
         MSA_HSQLDB.instance.setupConnection();
         loadNetworksFromDatabase();
-        //RuntimeStorage.instance.cqrInterpreterCoR =  createInterpreterCoR();
     }
 
     private void startGui() {

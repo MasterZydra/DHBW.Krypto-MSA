@@ -64,8 +64,7 @@ public class SendMessageP2PCommand extends CqrCommand {
             printFailMessage();
             return;
         }
-        gui.displayText("sent message: "+ getParam("message") + " from " + getParam("participantFrom") + " to " + getParam("participantTo"));
-        logger.log("displayed output:"+ getParam("message") + getParam("algorithm"));
+        logger.log("sent message: "+ getParam("message") + " from " + getParam("participantFrom") + " to " + getParam("participantTo"));
     }
 
     private void printFailMessage() {
