@@ -23,12 +23,13 @@ public class GUI extends Application {
     TextArea outputArea;
     TextArea commandLineArea;
 
-    private GuiController guiController = new GuiController(this);
+    private GuiController guiController;
 
     public void start(Stage primaryStage) {
 
-        Configuration.runtimeStorage.guiController = guiController;
+        guiController = new GuiController(this);
 
+        Configuration.runtimeStorage.instance.guiController = guiController;
 
         primaryStage.setTitle("MSA | Mosbach Security Agency");
 
@@ -51,7 +52,6 @@ public class GUI extends Application {
 
         closeButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent actionEvent) {
-
                 guiController.close();
             }
         });
@@ -92,10 +92,20 @@ public class GUI extends Application {
                     guiController.enableLogging();
                 }
                 break;
+            case F9:
+                commandLineArea.setText("send message \"hello b, this is a\" from a to b using Shift and keyfile shift.json");
         }
     }
 
     public void displayText(String text) {
         outputArea.setText(text);
+    }
+
+    public String getDisplayedText() {
+        return outputArea.getText();
+    }
+
+    public void clearText() {
+        outputArea.setText("");
     }
 }

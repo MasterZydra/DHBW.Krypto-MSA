@@ -1,6 +1,7 @@
 package configuration;
 
 import cryptography.CryptoAlgorithm;
+import logger.LoggerMSA;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,7 +19,6 @@ public enum Configuration {
     //default values
     public CryptoAlgorithm cryptoAlgorithm = CryptoAlgorithm.RSA;
     public int crackingMaxSeconds = 30;
-    public boolean loggingEnabled = true;
 
     // common
     public final String ud = System.getProperty("user.dir");
@@ -90,13 +90,6 @@ public enum Configuration {
             System.out.println("Could not load config.properties");
             e.printStackTrace();
         }
-        algorithm = props.getProperty("algorithm");
-        for (CryptoAlgorithm algo: CryptoAlgorithm.values()
-             ) {
-            if (algorithm.equalsIgnoreCase(algo.toString())){
-                cryptoAlgorithm = algo;
-            }
-        }
         try {
             crackingMaxSeconds = Integer.parseInt(props.getProperty("crackingMaxSeconds"));
         } catch (NumberFormatException e) {
@@ -129,10 +122,10 @@ public enum Configuration {
     }
 
     public void enableLogging() {
-        loggingEnabled = true;
+        LoggerMSA.setLoggingEnabled(true);
     }
 
     public void disableLogging() {
-        loggingEnabled = false;
+        LoggerMSA.setLoggingEnabled(false);
     }
 }
