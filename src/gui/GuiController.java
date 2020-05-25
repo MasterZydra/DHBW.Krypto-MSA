@@ -2,7 +2,7 @@ package gui;
 
 import commands.ICommand;
 import configuration.Configuration;
-import cqrInterpreter.CqrInterpreter1;
+import configuration.RuntimeStorage;
 import logger.LoggerMSA;
 
 public class GuiController {
@@ -14,7 +14,12 @@ public class GuiController {
     }
 
     public void displayText(String text){
-        gui.displayText(text);
+        StringBuilder sb = new StringBuilder();
+        if (!gui.getDisplayedText().isBlank()) {
+            sb.append(gui.getDisplayedText()).append("\n");
+        }
+        sb.append(text);
+        gui.displayText(sb.toString());
     }
 
     public void close() {
@@ -23,8 +28,10 @@ public class GuiController {
 
 
     public void executeCommand(String commandText) {
-        ICommand command = (new CqrInterpreter1(null)).interpret(commandText);
-        if(command!=null) command.execute();
+        ICommand command = RuntimeStorage.instance.cqrInterpreterCoR.interpret(commandText);
+        if(command!=null) {
+            command.execute();
+        }
     }
 
     public void disableLogging(){
@@ -35,21 +42,20 @@ public class GuiController {
     public void enableLogging(){
         displayText("logging on");
         cfg.enableLogging();
-
     }
 
     public boolean isLoggingEnabled() {
-        return cfg.loggingEnabled;
+        return LoggerMSA.isLoggingEnabled();
     }
 
     public void displayLog() {
         String latestLog = LoggerMSA.getLatestLog();
         if (latestLog != null && !latestLog.isEmpty()){
-            displayText(latestLog);}
+            gui.clearText();
+            displayText(latestLog);
+        }
         else{
             displayText("Loading latest log: Could not load Logfile!");
         }
-
-
     }
 }
