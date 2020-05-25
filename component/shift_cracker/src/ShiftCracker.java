@@ -1,5 +1,9 @@
 import java.text.DecimalFormat;
 
+/*
+ * Author: 6439456
+ */
+
 public class ShiftCracker {
     private static DecimalFormat decimalFormat = new DecimalFormat("#0.00000");
 
@@ -130,15 +134,6 @@ public class ShiftCracker {
         if (freqPercent >= 0.05 && freqPercent >= maxFrequency) {
             maxFrequency = freqPercent;
             decryptedMessage = stringBuilder.toString();
-            /*
-            System.out.println();
-            System.out.println("\t" + stringBuilder);
-            System.out.println("\t\tA : " + decimalFormat.format(aFrequency / frequency));
-            System.out.println("\t\tE : " + decimalFormat.format(eFrequency / frequency));
-            System.out.println("\t\tI : " + decimalFormat.format(iFrequency / frequency));
-            System.out.println("\t\tO : " + decimalFormat.format(oFrequency / frequency));
-            System.out.println("\t\tU : " + decimalFormat.format(uFrequency / frequency));
-            */
         }
     }
 }
