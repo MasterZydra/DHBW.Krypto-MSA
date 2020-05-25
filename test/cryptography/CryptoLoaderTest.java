@@ -3,9 +3,11 @@ package cryptography;
 import configuration.Configuration;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
-import java.util.Scanner;
+
+/*
+ * Author: 6439456
+ */
 
 public class CryptoLoaderTest {
     public static void main(String[] args) {
