@@ -25,7 +25,7 @@ public class ShiftCracker {
     }
 
     public String decryptMessage(String encryptedMessage) {
-        String source = encryptedMessage.trim().toUpperCase();
+        String source = encryptedMessage.trim();
         if (source.equals("")) {
             return "";
         }
@@ -61,9 +61,17 @@ public class ShiftCracker {
         for (int x = 0; x <= unicode.length - 1; x++) {
             unicodeCopy[x] = unicode[x];
 
+            // Upper letters
             if (unicode[x] >= 65 && unicode[x] <= 90) {
                 unicodeCopy[x] += shift;
                 if (unicodeCopy[x] > 90) {
+                    unicodeCopy[x] -= 26;
+                }
+            }
+            // Lower letters
+            else if (unicode[x] >= 97 && unicode[x] <= 122) {
+                unicodeCopy[x] += shift;
+                if (unicodeCopy[x] > 122) {
                     unicodeCopy[x] -= 26;
                 }
             }
@@ -90,19 +98,19 @@ public class ShiftCracker {
             frequency++;
 
             switch (c) {
-                case 'A':
+                case 'A': case 'a':
                     aFrequency++;
                     break;
-                case 'E':
+                case 'E': case 'e':
                     eFrequency++;
                     break;
-                case 'I':
+                case 'I': case 'i':
                     iFrequency++;
                     break;
-                case 'O':
+                case 'O': case 'o':
                     oFrequency++;
                     break;
-                case 'U':
+                case 'U': case 'u':
                     uFrequency++;
                     break;
                 default:
