@@ -124,8 +124,12 @@ public class ShiftCracker {
             stringBuilder.append(character);
         }
 
-        double freq = eFrequency / frequency + aFrequency / frequency + iFrequency / frequency + oFrequency / frequency + uFrequency / frequency;
-        if (freq >= 0.05) {
+        double freqPercent = eFrequency + aFrequency + iFrequency + oFrequency + uFrequency;
+        freqPercent /= frequency;
+
+        if (freqPercent >= 0.05 && freqPercent >= maxFrequency) {
+            maxFrequency = freqPercent;
+            decryptedMessage = stringBuilder.toString();
             /*
             System.out.println();
             System.out.println("\t" + stringBuilder);
@@ -133,16 +137,8 @@ public class ShiftCracker {
             System.out.println("\t\tE : " + decimalFormat.format(eFrequency / frequency));
             System.out.println("\t\tI : " + decimalFormat.format(iFrequency / frequency));
             System.out.println("\t\tO : " + decimalFormat.format(oFrequency / frequency));
-            System.out.println("\t\tU : " + decimalFormat.format(uFrequency / frequency));*/
-            setNewEncryptedMessage(freq, stringBuilder.toString());
+            System.out.println("\t\tU : " + decimalFormat.format(uFrequency / frequency));
+            */
         }
-    }
-
-    private void setNewEncryptedMessage(double frequency, String message) {
-        if (frequency < maxFrequency)
-            return;
-
-        maxFrequency = frequency;
-        decryptedMessage = message;
     }
 }
