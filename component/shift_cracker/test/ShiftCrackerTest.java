@@ -6,12 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 
 public class ShiftCrackerTest {
-    private ShiftCracker.Port port;
-
-    @BeforeEach
-    private void init() {
-        this.port = ShiftCracker.getInstance().port;
-    }
+    private ShiftCracker.Port port = ShiftCracker.getInstance().port;
 
     @Test
     public void crackHalloWieGehtEsIhnen() {
