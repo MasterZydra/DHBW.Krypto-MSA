@@ -4,17 +4,16 @@ import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/*
+ * Author: 6439456
+ */
+
 public class ShiftTest {
     public final String ud = System.getProperty("user.dir");
     public final String fs = System.getProperty("file.separator");
 
-    private Shift.Port port;
+    private Shift.Port port = Shift.getInstance().port;
     private File file = new File(ud + fs + "test" + fs + "keyfile.json");
-
-    @BeforeEach
-    private void init() {
-        this.port = Shift.getInstance().port;
-    }
 
     @Test
     public void encryptLettersOnly() {
