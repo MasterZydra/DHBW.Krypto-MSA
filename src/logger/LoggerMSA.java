@@ -22,7 +22,7 @@ public class LoggerMSA {
     private File logFile = null;
 
     public LoggerMSA(String cryptographyActionType, String algorithm) {
-        String fileName = cryptographyActionType + "_"
+        String fileName = cryptographyActionType.toLowerCase() + "_"
                 + algorithm + "_"
                 + Instant.now().getEpochSecond() + ".txt";
         String outputFileString = logDirectory + cfg.fs + fileName;
@@ -81,14 +81,11 @@ public class LoggerMSA {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-        //return newestLogFile==null?null:newestLogFile.getFileName().toString();
              return sb.toString();
      }
 
     public static void main(String[] args) {
-        LoggerMSA lt = new LoggerMSA("encode", "none");
+        LoggerMSA lt = new LoggerMSA("ENCODE", "none");
         lt.log("logger custom message!");
         System.out.println("latest: "+LoggerMSA.getLatestLog());
     }

@@ -26,8 +26,6 @@ public class SendMessageP2PCommand extends CqrCommand {
     private LoggerMSA logger;
     @Override
     public void execute() {
-        logger = new LoggerMSA("noCryptoAction", "noAlgorithm");
-        logger.log("executing SendMessageP2PCommand");
         Configuration cfg = Configuration.instance;
         GuiController gui = RuntimeStorage.instance.guiController;
         INetwork net = RuntimeStorage.instance.network;
@@ -64,7 +62,6 @@ public class SendMessageP2PCommand extends CqrCommand {
             printFailMessage();
             return;
         }
-        logger.log("sent message: "+ getParam("message") + " from " + getParam("participantFrom") + " to " + getParam("participantTo"));
     }
 
     private void printFailMessage() {
@@ -73,6 +70,5 @@ public class SendMessageP2PCommand extends CqrCommand {
 
     private void printFailMessage(String failMessage) {
         RuntimeStorage.instance.guiController.displayText(failMessage);
-        logger.log("processed SendMessageP2P command");
     }
 }

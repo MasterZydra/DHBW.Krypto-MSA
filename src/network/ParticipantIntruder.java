@@ -13,24 +13,16 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public abstract class Participant {
-    protected String name;
-
-    public Participant(String name) {
-        this.name = name;
+public class ParticipantIntruder extends Participant {
+    public ParticipantIntruder(String name) {
+        super(name);
     }
 
-    protected boolean isReceiver(MessageEvent messageEvent) {
-        return this.name.equals(messageEvent.getReceiver());
-    }
-
+    @Override
     @Subscribe
     public void receiveMessage(MessageEvent event){
         GuiController gui = RuntimeStorage.instance.guiController;
         IMsaDB db = RuntimeStorage.instance.db;
-        if (!event.getReceiver().equals(this.name)) {
-            return;
-        }
         CryptoLoader loader = new CryptoLoader();
         String decrypted;
         try {
@@ -47,6 +39,4 @@ public abstract class Participant {
         db.insertPostboxMessage(event.getReceiver(), event.getSender(), decrypted );
         gui.displayText(event.getReceiver() + " received new message");
     }
-
-
 }
