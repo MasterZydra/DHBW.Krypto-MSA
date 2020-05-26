@@ -6,15 +6,10 @@ import gui.GuiController;
 import logger.LoggerMSA;
 import network.INetwork;
 import network.ParticipantDefault;
+import network.ParticipantIntruder;
 import persistence.IMsaDB;
 
-//        "message"
-//        "participantFrom"
-//        "participantTo"
-//        "algorithm"
-//        "keyfile"
-
-public class intrudeChannelCommand extends CqrCommand {
+public class IntrudeChannelCommand extends CqrCommand {
     private LoggerMSA logger;
     @Override
     public void execute() {
@@ -31,17 +26,14 @@ public class intrudeChannelCommand extends CqrCommand {
             printFailMessage("Could not add intruder " + getParam("intruderName") + "to channel " + getParam("channelName"));
             return;
         }
-
         if (!db.getTypes().contains("intruder")) {
             db.insertType("intruder");
         }
-
-        net.addIntruder(getParam("channelName"), new ParticipantDefault());
-
+        net.addIntruder(getParam("channelName"), new ParticipantIntruder(getParam("intruderName")));
     }
 
     private void printFailMessage() {
-        printFailMessage("Couldn't process IntrudeChannel command");
+        printFailMessage("Could not process IntrudeChannel command");
     }
 
     private void printFailMessage(String failMessage) {
