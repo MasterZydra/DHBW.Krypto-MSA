@@ -36,7 +36,12 @@ public class CryptoLoader {
 
             instance = clazz.getMethod("getInstance").invoke(null);
             port = clazz.getDeclaredField("port").get(instance);
-            cryptoMethod = port.getClass().getMethod(CryptoMethod.DECRYPT.toString().toLowerCase(), String.class);
+            if (cryptoAlgorithm == CryptoAlgorithm.Shift)
+                cryptoMethod = port.getClass().getMethod(CryptoMethod.DECRYPT.toString().toLowerCase(), String.class);
+            else if (cryptoAlgorithm == CryptoAlgorithm.RSA)
+                cryptoMethod = port.getClass().getMethod(CryptoMethod.DECRYPT.toString().toLowerCase(), String.class, File.class);
+            else
+                cryptoMethod = null;
         }
         catch (Exception e) {
             e.printStackTrace();
