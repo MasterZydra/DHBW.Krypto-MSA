@@ -14,6 +14,7 @@ public class RsaTest {
     private RSA.Port port = RSA.getInstance().port;
     private File file48 = new File(ud + fs + "test" + fs + "RSA48.json");
     private File file128 = new File(ud + fs + "test" + fs + "RSA128.json");
+    private File file256 = new File(ud + fs + "test" + fs + "RSA256.json");
 
     @Test
     public void encryptLettersOnlyShort() {
@@ -73,5 +74,17 @@ public class RsaTest {
     public void decryptLettersWithNumbers() {
         String decrypted = this.port.decrypt("aa7nMxQ4wZyKNga5VRC4wHxvWEwNffSZG8erq0LnIeQ=", file128);
         assertEquals("Hallo, heute ist das Jahr 2020", decrypted);
+    }
+
+    @Test
+    public void encryptPleaseEncrypt() {
+        String encrypted = this.port.encrypt("Diese Nachricht bitte verschluesseln!", file256);
+        assertEquals("JtzsIKkM/0o5aTuh7ZXMi5wzLwVbJMEg1sMdzIs4oeTxq3gXnacH5iut5rVylXbkkjj9ysZt/umam/YOwMy/5g==", encrypted);
+    }
+
+    @Test
+    public void decryptPleaseEncrypt() {
+        String decrypted = this.port.decrypt("JtzsIKkM/0o5aTuh7ZXMi5wzLwVbJMEg1sMdzIs4oeTxq3gXnacH5iut5rVylXbkkjj9ysZt/umam/YOwMy/5g==", file256);
+        assertEquals("Diese Nachricht bitte verschluesseln!", decrypted);
     }
 }
