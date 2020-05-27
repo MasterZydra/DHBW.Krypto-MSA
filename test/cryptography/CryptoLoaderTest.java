@@ -16,6 +16,7 @@ public class CryptoLoaderTest {
     CryptoLoader loader = new CryptoLoader();
 
     File fileShift6 = new File(Configuration.instance.getKeyFilePath + "shift6.json");
+    File fileRSA24 = new File(Configuration.instance.getKeyFilePath + "rsa24.json");
     File fileRSA256 = new File(Configuration.instance.getKeyFilePath + "rsa256.json");
 
     @Test
@@ -96,5 +97,21 @@ public class CryptoLoaderTest {
         }
 
         assertEquals("Diese Nachricht bitte verschluesseln!", decryptedMsg);
+    }
+
+    @Test
+    public void rsaCracker() {
+        String crackedMsg = "";
+        try {
+            loader.createCrackerMethod(CryptoAlgorithm.RSA);
+            crackedMsg = (String) loader.getCryptoMethod().invoke(loader.getPort(), "BqGfopSO", fileRSA24);
+
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        assertEquals("Hallo", crackedMsg);
     }
 }
