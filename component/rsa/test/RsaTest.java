@@ -16,13 +16,13 @@ public class RsaTest {
     private File file128 = new File(ud + fs + "test" + fs + "RSA128.json");
 
     @Test
-    public void encryptLettersOnly1() {
+    public void encryptLettersOnlyShort() {
         String encrypted = this.port.encrypt("Hallo wie", file48);
         assertEquals("XWYxNmdA2rSVRbwF", encrypted);
     }
 
     @Test
-    public void decryptLettersOnly1() {
+    public void decryptLettersOnlyShort() {
         String decrypted = this.port.decrypt("XWYxNmdA2rSVRbwF", file48);
         assertEquals("Hallo wie", decrypted);
     }
