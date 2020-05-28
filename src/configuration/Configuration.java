@@ -17,7 +17,6 @@ public enum Configuration {
     public static RuntimeStorage runtimeStorage = RuntimeStorage.instance;
 
     //default values
-    public CryptoAlgorithm cryptoAlgorithm = CryptoAlgorithm.RSA;
     public int crackingMaxSeconds = 30;
 
     // common
