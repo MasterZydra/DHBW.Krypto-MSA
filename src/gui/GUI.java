@@ -93,7 +93,7 @@ public class GUI extends Application {
                 }
                 break;
             case F9:
-                commandLineArea.setText("send message \"hello b, this is a\" from a to b using Shift and keyfile shift.json");
+                commandLineArea.setText("send message \"hello b, this is a\" from a to b using Shift and keyfile shift4.json");
         }
     }
 

@@ -1,5 +1,9 @@
 import java.text.DecimalFormat;
 
+/*
+ * Author: 6439456
+ */
+
 public class ShiftCracker {
     private static DecimalFormat decimalFormat = new DecimalFormat("#0.00000");
 
@@ -25,7 +29,7 @@ public class ShiftCracker {
     }
 
     public String decryptMessage(String encryptedMessage) {
-        String source = encryptedMessage.trim().toUpperCase();
+        String source = encryptedMessage.trim();
         if (source.equals("")) {
             return "";
         }
@@ -61,9 +65,17 @@ public class ShiftCracker {
         for (int x = 0; x <= unicode.length - 1; x++) {
             unicodeCopy[x] = unicode[x];
 
+            // Upper letters
             if (unicode[x] >= 65 && unicode[x] <= 90) {
                 unicodeCopy[x] += shift;
                 if (unicodeCopy[x] > 90) {
+                    unicodeCopy[x] -= 26;
+                }
+            }
+            // Lower letters
+            else if (unicode[x] >= 97 && unicode[x] <= 122) {
+                unicodeCopy[x] += shift;
+                if (unicodeCopy[x] > 122) {
                     unicodeCopy[x] -= 26;
                 }
             }
@@ -90,19 +102,19 @@ public class ShiftCracker {
             frequency++;
 
             switch (c) {
-                case 'A':
+                case 'A': case 'a':
                     aFrequency++;
                     break;
-                case 'E':
+                case 'E': case 'e':
                     eFrequency++;
                     break;
-                case 'I':
+                case 'I': case 'i':
                     iFrequency++;
                     break;
-                case 'O':
+                case 'O': case 'o':
                     oFrequency++;
                     break;
-                case 'U':
+                case 'U': case 'u':
                     uFrequency++;
                     break;
                 default:
@@ -116,25 +128,12 @@ public class ShiftCracker {
             stringBuilder.append(character);
         }
 
-        double freq = eFrequency / frequency + aFrequency / frequency + iFrequency / frequency + oFrequency / frequency + uFrequency / frequency;
-        if (freq >= 0.05) {
-            /*
-            System.out.println();
-            System.out.println("\t" + stringBuilder);
-            System.out.println("\t\tA : " + decimalFormat.format(aFrequency / frequency));
-            System.out.println("\t\tE : " + decimalFormat.format(eFrequency / frequency));
-            System.out.println("\t\tI : " + decimalFormat.format(iFrequency / frequency));
-            System.out.println("\t\tO : " + decimalFormat.format(oFrequency / frequency));
-            System.out.println("\t\tU : " + decimalFormat.format(uFrequency / frequency));*/
-            setNewEncryptedMessage(freq, stringBuilder.toString());
+        double freqPercent = eFrequency + aFrequency + iFrequency + oFrequency + uFrequency;
+        freqPercent /= frequency;
+
+        if (freqPercent >= 0.05 && freqPercent >= maxFrequency) {
+            maxFrequency = freqPercent;
+            decryptedMessage = stringBuilder.toString();
         }
-    }
-
-    private void setNewEncryptedMessage(double frequency, String message) {
-        if (frequency < maxFrequency)
-            return;
-
-        maxFrequency = frequency;
-        decryptedMessage = message;
     }
 }
