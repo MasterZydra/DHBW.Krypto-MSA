@@ -56,7 +56,7 @@ public class CryptoLoaderTest {
         String crackedMsg = "";
         try {
             loader.createCrackerMethod(CryptoAlgorithm.Shift);
-            crackedMsg = (String) loader.getCryptoMethod().invoke(loader.getPort(), "Tmxxa. Yquz Zmyq uef Vgxuge Omqemd.");
+            crackedMsg = (String) loader.getCryptoMethod().invoke(loader.getPort(), "Tmxxa. Yquz Zmyq uef Vgxuge Omqemd.", null);
 
         } catch (IllegalAccessException e) {
             e.printStackTrace();
