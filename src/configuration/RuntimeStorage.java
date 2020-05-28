@@ -3,6 +3,7 @@ package configuration;
 import cqrInterpreter.CqrInterpreter;
 import cqrInterpreter.CqrInterpreter1;
 import cqrInterpreter.CqrInterpreter10;
+import cqrInterpreter.CqrInterpreter9;
 import network.INetwork;
 import network.Network;
 import persistence.IMsaDB;
@@ -29,6 +30,8 @@ public enum RuntimeStorage {
 
     private CqrInterpreter generateCqrChain() {
         CqrInterpreter10 cqr10 = new CqrInterpreter10(null);
-        return new CqrInterpreter1(cqr10);
+        CqrInterpreter9 cqr9 = new CqrInterpreter9(cqr10);
+        CqrInterpreter1 cqr1 = new CqrInterpreter1(cqr9);
+        return cqr1;
     }
 }

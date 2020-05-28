@@ -40,7 +40,7 @@ public class CqrInterpreter9 extends CqrInterpreter{
                 command.setParam("channelName", channelName);
                 return command;
             }
-            gui.displayText("Syntax error: 'send message \"[message]\" from [participant] to [participant] using [algorithm] and keyfile [filename]' expected");
+            gui.displayText("Syntax error: 'intrude channel [channel] by [participant]' expected");
             return null;
         }
         else
