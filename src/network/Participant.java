@@ -31,6 +31,9 @@ public abstract class Participant {
         if (!event.getReceiver().equals(this.name)) {
             return;
         }
+
+        gui.displayText(event.getReceiver() + " received new message");
+
         CryptoLoader loader = new CryptoLoader();
         String decrypted;
         try {
@@ -45,7 +48,6 @@ public abstract class Participant {
             return;
         }
         db.insertPostboxMessage(event.getReceiver(), event.getSender(), decrypted );
-        gui.displayText(event.getReceiver() + " received new message");
     }
 
 

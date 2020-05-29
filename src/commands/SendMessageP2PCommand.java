@@ -16,12 +16,6 @@ import persistence.dataModels.Message;
 import java.io.File;
 import java.lang.reflect.Method;
 
-//        "message"
-//        "participantFrom"
-//        "participantTo"
-//        "algorithm"
-//        "keyfile"
-
 public class SendMessageP2PCommand extends CqrCommand {
     private LoggerMSA logger;
     @Override
@@ -65,7 +59,7 @@ public class SendMessageP2PCommand extends CqrCommand {
     }
 
     private void printFailMessage() {
-        printFailMessage("Couldn't process SendMessageP2P command");
+        printFailMessage("Could not process SendMessageP2P command");
     }
 
     private void printFailMessage(String failMessage) {
