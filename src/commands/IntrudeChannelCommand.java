@@ -20,6 +20,7 @@ public class IntrudeChannelCommand extends CqrCommand {
         if (!db.getTypes().contains("intruder")) {
             db.insertType("intruder");
         }
+        //TODo: remove automatically adding intruder, add error if intruder not in db yet
         db.insertParticipant(getParam("intruderName"), "intruder");
         net.addIntruder(getParam("channelName"), new ParticipantIntruder(getParam("intruderName")));
     }
