@@ -49,7 +49,7 @@ public class CqrInterpreter10 extends CqrInterpreter{
                 String partAfterQuotes = cqr.substring(lastQuote + 1);
 
                 if(this.getParams(partAfterQuotes)) {
-                    ICommand command = CommandFactory.sendMessageP2PCommand();
+                    ICommand command = CommandFactory.getSendMessageP2PCommand();
                     command.setParam("message", message);
                     command.setParam("participantFrom", participantFrom);
                     command.setParam("participantTo", participantTo);
@@ -58,7 +58,6 @@ public class CqrInterpreter10 extends CqrInterpreter{
                     return command;
                 }
             }
-            //todo: send to GuiController instead of command line
             gui.displayText("Syntax error: 'send message \"[message]\" from [participant] to [participant] using [algorithm] and keyfile [filename]' expected");
             return null;
         }

@@ -21,7 +21,19 @@ public class CommandFactory {
         return new RegisterParticipantCommand();
     }
 
-    public static ICommand sendMessageP2PCommand() {
+    public static ICommand getSendMessageP2PCommand() {
         return new SendMessageP2PCommand();
+    }
+
+    public static ICommand getIntrudeChannelCommand() {
+        return new IntrudeChannelCommand();
+    }
+
+    public static ICommand getDropChannelCommand() {
+        return new DropChannelCommand();
+    }
+
+    public static ICommand getShowChannelCommand() {
+        return new ShowChannelCommand();
     }
 }

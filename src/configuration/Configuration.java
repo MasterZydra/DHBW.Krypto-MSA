@@ -17,7 +17,9 @@ public enum Configuration {
     public static RuntimeStorage runtimeStorage = RuntimeStorage.instance;
 
     //default values
-    public int crackingMaxSeconds = 30;
+    public CryptoAlgorithm cryptoAlgorithm = CryptoAlgorithm.RSA;
+    public int crackingMaxSeconds = 2;
+
 
     // common
     public final String ud = System.getProperty("user.dir");
