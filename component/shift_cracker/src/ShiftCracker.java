@@ -1,3 +1,4 @@
+import java.io.File;
 import java.text.DecimalFormat;
 
 /*
@@ -23,7 +24,7 @@ public class ShiftCracker {
     }
 
     public class Port implements IShiftCracker {
-        public String decrypt(String encryptedMessage) {
+        public String decrypt(String encryptedMessage, File file) {
             return decryptMessage(encryptedMessage);
         }
     }

@@ -20,6 +20,7 @@ public enum Configuration {
     public CryptoAlgorithm cryptoAlgorithm = CryptoAlgorithm.RSA;
     public int crackingMaxSeconds = 2;
 
+
     // common
     public final String ud = System.getProperty("user.dir");
     public final String fs = System.getProperty("file.separator");
