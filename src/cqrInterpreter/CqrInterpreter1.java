@@ -2,7 +2,6 @@ package cqrInterpreter;
 
 import commands.CommandFactory;
 import commands.ICommand;
-import configuration.RuntimeStorage;
 
 public class CqrInterpreter1 extends CqrInterpreter{
     public CqrInterpreter1(CqrInterpreter successor) {
@@ -18,7 +17,7 @@ public class CqrInterpreter1 extends CqrInterpreter{
                 return CommandFactory.getShowAlgorithmCommand();
             }
 
-            RuntimeStorage.instance.guiController.displayText("Syntax error: 'show algorithm' expected");
+            printMessage("Syntax error: 'show algorithm' expected");
             return null;
         }
         else
