@@ -21,7 +21,6 @@ public class Application {
         runtimeStorage.init();
         IMsaDB db = MSA_HSQLDB.instance;
         INetwork net = runtimeStorage.network;
-        System.out.println("test:" +runtimeStorage);
         Application a = new Application();
         a.init();
         a.startGui();
