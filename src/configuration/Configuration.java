@@ -17,8 +17,7 @@ public enum Configuration {
     public static RuntimeStorage runtimeStorage = RuntimeStorage.instance;
 
     //default values
-    public CryptoAlgorithm cryptoAlgorithm = CryptoAlgorithm.RSA;
-    public int crackingMaxSeconds = 2;
+    public int crackingMaxSeconds;
 
 
     // common
@@ -51,6 +50,7 @@ public enum Configuration {
     public String getKeyFilePath = ud + fs + "keyfiles" + fs;
 
     Configuration() {
+        loadProperties();
     }
 
     public String getCryptoAlgorithmPath(CryptoAlgorithm cryptoAlgorithm) {

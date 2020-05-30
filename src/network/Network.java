@@ -1,6 +1,7 @@
 package network;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Network implements INetwork {
@@ -24,5 +25,18 @@ public class Network implements INetwork {
     @Override
     public void sendMessage(String channelName, MessageEvent message) {
         this.channels.get(channelName).sendMessage(message);
+    }
+
+    @Override
+    public Participant getParticipant(String participantName) {
+        for (IChannel channel : channels.values()) {
+            List<Participant> participants = channel.getParticipants();
+            for (Participant part : participants) {
+                if (part.name.equals(participantName)) {
+                    return part;
+                }
+            }
+        }
+        return null;
     }
 }
