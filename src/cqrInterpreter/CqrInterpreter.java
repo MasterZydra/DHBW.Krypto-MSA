@@ -1,6 +1,8 @@
 package cqrInterpreter;
 
 import commands.ICommand;
+import configuration.RuntimeStorage;
+import gui.GuiController;
 
 public abstract class CqrInterpreter {
     private CqrInterpreter successor;
@@ -30,5 +32,13 @@ public abstract class CqrInterpreter {
 
     public void setSuccessor(CqrInterpreter successor) {
         this.successor = successor;
+    }
+
+    protected void printMessage(String message) {
+        GuiController guiController = RuntimeStorage.instance.guiController;
+        if (guiController != null)
+            guiController.displayText(message);
+        else
+            System.out.println(message);
     }
 }
