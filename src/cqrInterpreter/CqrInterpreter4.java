@@ -2,6 +2,7 @@ package cqrInterpreter;
 
 import commands.CommandFactory;
 import commands.ICommand;
+import configuration.RuntimeStorage;
 
 public class CqrInterpreter4 extends CqrInterpreter{
     private String algo;
@@ -57,7 +58,7 @@ public class CqrInterpreter4 extends CqrInterpreter{
                 }
             }
 
-            System.out.println("Syntax error: 'crack encrypted message \"[message]\" using [algorithm]' expected");
+            RuntimeStorage.instance.guiController.displayText("Syntax error: 'crack encrypted message \"[message]\" using [algorithm]' expected");
             return null;
         }
         else

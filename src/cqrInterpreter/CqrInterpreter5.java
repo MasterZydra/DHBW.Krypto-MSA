@@ -2,6 +2,7 @@ package cqrInterpreter;
 
 import commands.CommandFactory;
 import commands.ICommand;
+import configuration.RuntimeStorage;
 
 public class CqrInterpreter5 extends CqrInterpreter{
     private String participant;
@@ -42,7 +43,7 @@ public class CqrInterpreter5 extends CqrInterpreter{
                     return command;
             }
 
-            System.out.println("Syntax error: 'register participant [name] with type [normal | intruder]");
+            RuntimeStorage.instance.guiController.displayText("Syntax error: 'register participant [name] with type [normal | intruder]");
             return null;
         }
         else
