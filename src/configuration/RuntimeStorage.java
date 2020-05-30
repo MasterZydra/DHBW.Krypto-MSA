@@ -30,7 +30,12 @@ public enum RuntimeStorage {
         CqrInterpreter9 cqr9 = new CqrInterpreter9(cqr10);
         CqrInterpreter8 cqr8 = new CqrInterpreter8(cqr9);
         CqrInterpreter7 cqr7 = new CqrInterpreter7(cqr8);
-        CqrInterpreter1 cqr1 = new CqrInterpreter1(cqr7);
+        CqrInterpreter6 cqr6 = new CqrInterpreter6(cqr7);
+        CqrInterpreter5 cqr5 = new CqrInterpreter5(cqr6);
+        CqrInterpreter4 cqr4 = new CqrInterpreter4(cqr5);
+        CqrInterpreter3 cqr3 = new CqrInterpreter3(cqr4);
+        CqrInterpreter2 cqr2 = new CqrInterpreter2(cqr3);
+        CqrInterpreter1 cqr1 = new CqrInterpreter1(cqr2);
         return cqr1;
     }
 }

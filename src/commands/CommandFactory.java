@@ -36,4 +36,8 @@ public class CommandFactory {
     public static ICommand getShowChannelCommand() {
         return new ShowChannelCommand();
     }
+
+    public static ICommand getCreateChannelCommand() {
+        return new CreateChannelCommand() ;
+    }
 }
