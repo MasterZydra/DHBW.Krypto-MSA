@@ -38,7 +38,7 @@ public class CqrInterpreter5Test {
         ICommand command = interpreter.interpret("rEgIsTeR participant partOne wITh TYpE nOrmAl");
         assertTrue(command instanceof RegisterParticipantCommand);
         assertEquals(command.getParam("participant"), "partOne");
-        assertEquals(command.getParam("type"), "nOrmAl");
+        assertEquals(command.getParam("type"), "normal");
     }
 
     @Test
