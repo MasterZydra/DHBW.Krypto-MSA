@@ -16,12 +16,19 @@ public class Channel implements IChannel {
         this.participants = new LinkedList<>();
     }
 
+    @Override
     public void sendMessage(MessageEvent message) {
         this.eventBus.post(message);
     }
 
+    @Override
     public void addParticipant(Participant participant) {
         this.participants.add(participant);
         this.eventBus.register(participant);
+    }
+
+    @Override
+    public List<Participant> getParticipants() {
+        return participants;
     }
 }
