@@ -17,8 +17,7 @@ public class ShowAlgorithmCommand extends CqrCommand {
         GuiController gui = RuntimeStorage.instance.guiController;
         List<String> list = cfg.getAlgorithmFileNames();
         String output= "";
-        for (String algo: list
-             ) {
+        for (String algo: list) {
             if(!output.isBlank()) output+=" | ";
             output += algo;
             logger.log("found algo: "+algo);
