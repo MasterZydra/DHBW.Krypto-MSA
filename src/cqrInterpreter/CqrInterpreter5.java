@@ -21,7 +21,7 @@ public class CqrInterpreter5 extends CqrInterpreter{
 
             if (validCqr) {
                 participant = cqrParts[2];
-                type = cqrParts[5];
+                type = cqrParts[5].toLowerCase();
 
                 validCqr &= !participant.isEmpty();
                 validCqr &= (type.equalsIgnoreCase("normal") |
