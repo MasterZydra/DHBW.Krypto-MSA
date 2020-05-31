@@ -11,7 +11,7 @@ public abstract class CqrInterpreter {
         if (getSuccessor() != null)
             return getSuccessor().interpret(cqr);
         else {
-            System.out.println("Invalid command");
+            printMessage("Invalid command");
             return null;
         }
     }
