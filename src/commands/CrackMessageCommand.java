@@ -5,40 +5,38 @@ import cryptography.*;
 import logger.LoggerMSA;
 
 import java.io.File;
-import java.lang.reflect.Method;
+import java.util.concurrent.*;
 
 public class CrackMessageCommand extends CqrCommand {
     private LoggerMSA logger;
 
     @Override
     public void execute() {
-        CryptoLoader loader = new CryptoLoader();
-        try {
-            // Load component
-            loader.createCrackerMethod(CryptoAlgorithm.valueOfCaseIgnore(getParam("algorithm")));
-            Method method = loader.getCryptoMethod();
-
-            // Build file
-            String fileName = getParam("keyfile");
-            File file = null;
-            if (fileName != null) {
-                if (!fileName.toLowerCase().endsWith(".json"))
-                    fileName += ".json";
-                file = new File(Configuration.instance.getKeyFilePath + fileName);
-            }
-
-            // Decrypt message
-            String cracked = (String) method.invoke(loader.getPort(), getParam("message"), file);
-            printMessage(cracked);
-        } catch (Exception e) {
-            e.printStackTrace();
-            printFailMessage();
-            return;
+        // Build file
+        String fileName = getParam("keyfile");
+        File file = null;
+        if (fileName != null) {
+            if (!fileName.toLowerCase().endsWith(".json"))
+                fileName += ".json";
+            file = new File(Configuration.instance.getKeyFilePath + fileName);
         }
-    }
 
-    private void printFailMessage() {
-        printMessage("Could not process DecryptMessage command");
+        // Crack message
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        CrackTask task = new CrackTask();
+        task.setKeyfile(file);
+        task.setAlgorithm(getParam("algorithm"));
+        task.setMessage(getParam("message"));
+        Future<String> future = executor.submit(task);
+        try {
+            String crackedMsg = future.get(Configuration.instance.crackingMaxSeconds, TimeUnit.SECONDS);
+            printMessage(crackedMsg);
+        }
+        catch (TimeoutException | InterruptedException | ExecutionException e) {
+            printMessage("cracking encrypted message \"" + getParam("message") + "\" failed");
+        }
+
+        executor.shutdownNow();
     }
 
     private void printMessage(String failMessage) {
