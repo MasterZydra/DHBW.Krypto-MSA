@@ -11,7 +11,10 @@ public abstract class CqrCommand implements ICommand {
     }
 
     public String getParam(String name) {
-        return this.params.get(name);
+        if (this.params.containsKey(name))
+            return this.params.get(name);
+        else
+            return null;
     }
 
     public abstract void execute();
