@@ -5,6 +5,7 @@ import commands.ICommand;
 
 public class CqrInterpreter4 extends CqrInterpreter{
     private String algo;
+    private String file;
 
     public CqrInterpreter4(CqrInterpreter successor) {
         this.setSuccessor(successor);
@@ -21,16 +22,27 @@ public class CqrInterpreter4 extends CqrInterpreter{
 
     private boolean getUsingParams(String cqrUsing) {
         String[] usings = cqrUsing.trim().split(" ");
-        boolean validCqr = usings.length == 2;
-        if (validCqr) {
-            validCqr &= usings[0].equalsIgnoreCase("using");
+
+        if (usings.length == 2 || usings.length == 5) {
+            boolean validCqr = usings[0].equalsIgnoreCase("using");
+
+            if (usings.length == 5) {
+                validCqr = usings[2].equalsIgnoreCase("and");
+                validCqr &= usings[3].equalsIgnoreCase("keyfile");
+            }
 
             if (validCqr) {
                 algo = usings[1];
                 validCqr &= !algo.isEmpty();
+
+                if (usings.length == 5) {
+                    file = usings[4];
+                    validCqr &= !algo.isEmpty() && !file.isEmpty();
+                }
             }
+            return validCqr;
         }
-        return validCqr;
+        return false;
     }
 
     @Override
@@ -53,11 +65,12 @@ public class CqrInterpreter4 extends CqrInterpreter{
                     ICommand command = CommandFactory.getCrackMessageCommand();
                     command.setParam("message", message);
                     command.setParam("algorithm", algo);
+                    command.setParam("keyfile", file);
                     return command;
                 }
             }
 
-            printMessage("Syntax error: 'crack encrypted message \"[message]\" using [algorithm]' expected");
+            printMessage("Syntax error: 'crack encrypted message \"[message]\" using [algorithm] [and keyfile [filename]]' expected");
             return null;
         }
         else
