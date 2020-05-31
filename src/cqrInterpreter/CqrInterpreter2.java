@@ -2,7 +2,6 @@ package cqrInterpreter;
 
 import commands.CommandFactory;
 import commands.ICommand;
-import configuration.RuntimeStorage;
 
 public class CqrInterpreter2 extends CqrInterpreter{
     private String algo;
@@ -50,7 +49,7 @@ public class CqrInterpreter2 extends CqrInterpreter{
                 }
             }
 
-            RuntimeStorage.instance.guiController.displayText("Syntax error: 'encrypt message \"[message]\" using [algorithm] and keyfile [filename]' expected");
+            printMessage("Syntax error: 'encrypt message \"[message]\" using [algorithm] and keyfile [filename]' expected");
             return null;
         }
         else

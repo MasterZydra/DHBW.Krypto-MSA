@@ -58,4 +58,28 @@ public class GuiController {
             displayText("Loading latest log: Could not load Logfile!");
         }
     }
+
+    public void showHelp() {
+        displayText("Help");
+        displayText("- Available Commands:");
+        displayText("  * show algorithm");
+        displayText("  * encrypt message");
+        displayText("  * decrypt message");
+        displayText("  * crack encrypted message");
+        displayText("  * register participant");
+        displayText("  * create channel");
+        displayText("  * show channel");
+        displayText("  * drop channel");
+        displayText("  * intrude channel");
+        displayText("  * send message");
+
+        displayText("");
+        displayText("- Key Assignment");
+        displayText("  F1  Show help");
+        displayText("  F3  De/Activate debug mode");
+        displayText("  F5  Execute command");
+        displayText("  F8  Show latest log file");
+
+        displayText("");
+    }
 }

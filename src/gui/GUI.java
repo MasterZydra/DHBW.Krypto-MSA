@@ -79,6 +79,9 @@ public class GUI extends Application {
 
     private void keyPressed(KeyCode keyCode) {
         switch (keyCode) {
+            case F1:
+                guiController.showHelp();
+                break;
             case F8:
                 guiController.displayLog();
                 break;
@@ -99,6 +102,8 @@ public class GUI extends Application {
 
     public void displayText(String text) {
         outputArea.setText(text);
+        // Automatically scroll down
+        outputArea.positionCaret(outputArea.getLength());
     }
 
     public String getDisplayedText() {
