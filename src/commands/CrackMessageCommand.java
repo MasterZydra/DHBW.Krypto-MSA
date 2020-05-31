@@ -35,7 +35,7 @@ public class CrackMessageCommand extends CqrCommand {
         catch (TimeoutException | InterruptedException | ExecutionException e) {
             printMessage("cracking encrypted message \"" + getParam("message") + "\" failed");
         }
-
+        future.cancel(true);
         executor.shutdownNow();
     }
 
