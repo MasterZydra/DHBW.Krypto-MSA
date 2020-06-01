@@ -190,14 +190,16 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     @Override
     public void insertPostboxMessage(String participantTo, String participantFrom, String message) {
+        if (!participantExists(participantFrom) || !participantExists(participantTo)) {
+            System.out.println("Could not save postbox message, participant not found.");
+        }
         int participantFromID = getParticipantID(participantFrom);
-        int participantToID = getParticipantID(participantTo);
         long timeStamp = Instant.now().getEpochSecond();
         StringBuilder sqlStringBuilder = new StringBuilder();
-        sqlStringBuilder.append("INSERT INTO postbox (participant_from_id, participant_to_id, message, timestamp)");
+        sqlStringBuilder.append("INSERT INTO postbox"+participantTo+" (participant_from_id, message, timestamp)");
         sqlStringBuilder.append(" VALUES (");
-        sqlStringBuilder.append(MessageFormat.format("{0}, {1}, ''{2}'', {3} ",
-                participantFromID, participantToID, message, Long.toString(timeStamp)));
+        sqlStringBuilder.append(MessageFormat.format("{0}, ''{1}'', {2} ",
+                participantFromID, message, Long.toString(timeStamp)));
         sqlStringBuilder.append(")");
         System.out.println("sqlStringBuilder : " + sqlStringBuilder.toString());
         update(sqlStringBuilder.toString());
@@ -264,6 +266,9 @@ public enum MSA_HSQLDB implements IMsaDB {
     @Override
     public List<PostboxMessage> getPostboxMessages(String partToName) {
         List<PostboxMessage> msgList = new ArrayList<>();
+        if(!participantExists(partToName)){
+            System.out.println("Could not get postbox message, participant not found.");
+        }
         try {
             String sqlStatement = "SELECT * from POSTBOX_"+partToName;
             Statement statement = connection.createStatement();
@@ -420,6 +425,7 @@ public enum MSA_HSQLDB implements IMsaDB {
     private String getParticipantName(int participantID) {
         try {
             String sqlStatement = "SELECT name from participants where ID=" + participantID;
+
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
             if (!resultSet.next()) {
