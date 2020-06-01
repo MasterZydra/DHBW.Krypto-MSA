@@ -4,6 +4,10 @@ import configuration.RuntimeStorage;
 import persistence.IMsaDB;
 import persistence.dataModels.Participant;
 
+/*
+ * Author: 6439456
+ */
+
 public class RegisterParticipantCommand extends CqrCommand {
     IMsaDB db = RuntimeStorage.instance.db;
 
