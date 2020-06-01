@@ -7,6 +7,10 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+/*
+ * Author: 6439456
+ */
+
 public class CryptoLoader {
     private Object port;
     private Method cryptoMethod;
