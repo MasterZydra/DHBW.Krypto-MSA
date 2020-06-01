@@ -13,8 +13,13 @@ public class CqrInterpreter7 extends CqrInterpreter{
     public ICommand interpret(String cqr) {
         String cqrTrans = this.transformCqrString(cqr);
         if (canHandleCQR(cqrTrans, "show channel")) {
-            ICommand command = CommandFactory.getShowChannelCommand();
-            return command;
+            String[] commandParts = cqr.trim().split(" ");
+            if(commandParts.length != 2) return null;
+            if(commandParts[0].equalsIgnoreCase("show") && commandParts[1].equalsIgnoreCase("channel") ) {
+                return CommandFactory.getShowChannelCommand();}
+            else {
+                return null;
+            }
         }
         else
             return super.interpret(cqr);

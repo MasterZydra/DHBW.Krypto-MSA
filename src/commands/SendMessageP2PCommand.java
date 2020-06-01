@@ -5,8 +5,6 @@ import configuration.RuntimeStorage;
 import cryptography.CryptoAlgorithm;
 import cryptography.CryptoLoader;
 import cryptography.CryptoMethod;
-import gui.GuiController;
-import logger.LoggerMSA;
 import network.INetwork;
 import network.MessageEvent;
 import persistence.IMsaDB;
@@ -17,11 +15,8 @@ import java.io.File;
 import java.lang.reflect.Method;
 
 public class SendMessageP2PCommand extends CqrCommand {
-    private LoggerMSA logger;
     @Override
     public void execute() {
-        Configuration cfg = Configuration.instance;
-        GuiController gui = RuntimeStorage.instance.guiController;
         INetwork net = RuntimeStorage.instance.network;
         IMsaDB db = RuntimeStorage.instance.db;
 
