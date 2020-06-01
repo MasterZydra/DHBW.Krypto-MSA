@@ -2,47 +2,49 @@ package cqrInterpreter;
 
 import commands.CrackMessageCommand;
 import commands.ICommand;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CqrInterpreter4Test {
     @Test
-    @Order(1)
     public void CqrInterpreter4Match() {
         CqrInterpreter interpreter = new CqrInterpreter4(null);
         ICommand command = interpreter.interpret("crack encrypted message \"AbCDe\" using RSA");
         assertTrue(command instanceof CrackMessageCommand);
-        assertEquals(command.getParam("message"), "AbCDe");
-        assertEquals(command.getParam("algorithm"), "RSA");
+        assertEquals("AbCDe", command.getParam("message"));
+        assertEquals("RSA", command.getParam("algorithm"));
     }
 
     @Test
-    @Order(2)
+    public void CqrInterpreter4MatchWithFile() {
+        CqrInterpreter interpreter = new CqrInterpreter4(null);
+        ICommand command = interpreter.interpret("crack encrypted message \"AbCDe\" using RSA and keyfile file");
+        assertTrue(command instanceof CrackMessageCommand);
+        assertEquals("AbCDe", command.getParam("message"));
+        assertEquals("RSA", command.getParam("algorithm"));
+        assertEquals("file", command.getParam("keyfile"));
+    }
+
+    @Test
     public void CqrInterpreter4MatchUpperLowerCase() {
         CqrInterpreter interpreter = new CqrInterpreter4(null);
         ICommand command = interpreter.interpret("cRaCk eNcRypTed mESsaGe \"AbCDe\" uSInG RSA");
         assertTrue(command instanceof CrackMessageCommand);
-        assertEquals(command.getParam("message"), "AbCDe");
-        assertEquals(command.getParam("algorithm"), "RSA");
+        assertEquals("AbCDe", command.getParam("message"));
+        assertEquals("RSA", command.getParam("algorithm"));
     }
 
     @Test
-    @Order(3)
     public void CqrInterpreter4MatchSpaces() {
         CqrInterpreter interpreter = new CqrInterpreter4(null);
         ICommand command = interpreter.interpret(" crack encrypted message \"AbCDe\" using RSA ");
         assertTrue(command instanceof CrackMessageCommand);
-        assertEquals(command.getParam("message"), "AbCDe");
-        assertEquals(command.getParam("algorithm"), "RSA");
+        assertEquals("AbCDe", command.getParam("message"));
+        assertEquals("RSA", command.getParam("algorithm"));
     }
 
     @Test
-    @Order(4)
     public void CqrInterpreter4MismatchTypo() {
         CqrInterpreter interpreter = new CqrInterpreter4(null);
         ICommand command = interpreter.interpret("crack encrypted messages \"AbCDe\" using RSA");
@@ -50,7 +52,6 @@ public class CqrInterpreter4Test {
     }
 
     @Test
-    @Order(5)
     public void CqrInterpreter4MismatchToShort() {
         CqrInterpreter interpreter = new CqrInterpreter4(null);
         ICommand command = interpreter.interpret("crack encrypted message \"AbCDe\" using");
@@ -58,7 +59,20 @@ public class CqrInterpreter4Test {
     }
 
     @Test
-    @Order(6)
+    public void CqrInterpreter4MismatchNofile() {
+        CqrInterpreter interpreter = new CqrInterpreter4(null);
+        ICommand command = interpreter.interpret("crack encrypted message \"AbCDe\" using RSA and keyfile");
+        assertNull(command);
+    }
+
+    @Test
+    public void CqrInterpreter4MismatchWithFileToLong() {
+        CqrInterpreter interpreter = new CqrInterpreter4(null);
+        ICommand command = interpreter.interpret("crack encrypted message \"AbCDe\" using RSA and keyfile file and");
+        assertNull(command);
+    }
+
+    @Test
     public void CqrInterpreter4MismatchToLong() {
         CqrInterpreter interpreter = new CqrInterpreter4(null);
         ICommand command = interpreter.interpret("crack encrypted message \"AbCDe\" using RSA and SHIFT");
@@ -66,7 +80,6 @@ public class CqrInterpreter4Test {
     }
 
     @Test
-    @Order(7)
     public void CqrInterpreter4MismatchQuote() {
         CqrInterpreter interpreter = new CqrInterpreter4(null);
         ICommand command = interpreter.interpret("crack encrypted message \"AbCDe using RSA");
@@ -74,7 +87,6 @@ public class CqrInterpreter4Test {
     }
 
     @Test
-    @Order(8)
     public void CqrInterpreter4MismatchEmptyParam() {
         CqrInterpreter interpreter = new CqrInterpreter4(null);
         ICommand command = interpreter.interpret("crack encrypted message \"AbCDe\" using   ");

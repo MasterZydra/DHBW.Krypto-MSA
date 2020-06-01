@@ -39,6 +39,8 @@ public class RSACracker {
         
         try {
             byte[] plainBytes = execute(new BigInteger(bytes)).toByteArray();
+            if (plainBytes == null)
+                return "";
             return new String(plainBytes);
         } catch (RSACrackerException rsae) {
             System.out.println(rsae.getMessage());
@@ -82,6 +84,9 @@ public class RSACracker {
         BigInteger p, q, d;
         List<BigInteger> factorList = factorize(n);
 
+        if (factorList == null)
+            return null;
+
         if (factorList.size() != 2) {
             throw new RSACrackerException("cannot determine factors p and q");
         }
@@ -104,6 +109,11 @@ public class RSACracker {
         while (n.mod(two).equals(BigInteger.ZERO)) {
             factorList.add(two);
             n = n.divide(two);
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException interruptedException) {
+                return null;
+            }
         }
 
         if (n.compareTo(BigInteger.ONE) > 0) {
@@ -114,6 +124,11 @@ public class RSACracker {
                     n = n.divide(factor);
                 } else {
                     factor = factor.add(two);
+                }
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException interruptedException) {
+                    return null;
                 }
             }
             factorList.add(n);

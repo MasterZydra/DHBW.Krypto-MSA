@@ -1,5 +1,20 @@
 # DHBW.Krypto-MSA
 
+## Anmerkungen zur Implementierung
+Um die Anwendung funktionsfähig zu bekommen, sind Abweichungen von der Aufgabenstellung notwendig.
+
+### Cracker
+Der RSA Cracker benötigt eine `File` für den öffentlichen Schlüssel. Um beim Arbeiten mit der Komponente keine Fallunterscheidung vornehmen zu müssen, wurde das Interface für den Shift Cracker auch um `File` erweitert. Das übergebene Objekt wird jedoch nicht verarbeitet.
+
+Schnittstelle RSA Cracker:  
+`String decrypt(String encryptedMessage, File publicKeyfile);`
+
+Schnittstelle Shift Cracker:  
+`String decrypt(String encryptedMessage, File file);`
+
+Der CQL Befehl wurde erweitert mit der Option eine Datei zu übergeben:
+`crack encrypted message "[message]" using [algorithm] [and keyfile [filename]]`
+
 ## CQL (Cryptographic Query Language)
 - **show algorithm**  
 Die in Komponenten gekapselten Algorithmen werden angezeigt.

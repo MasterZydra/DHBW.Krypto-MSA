@@ -6,10 +6,8 @@ import commands.ShowAlgorithmCommand;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CqrInterpreter1Test {
     @Test
-    @Order(1)
     public void CqrInterpreter1Match() {
         CqrInterpreter interpreter = new CqrInterpreter1(null);
         ICommand command = interpreter.interpret("show algorithm");
@@ -17,7 +15,6 @@ public class CqrInterpreter1Test {
     }
 
     @Test
-    @Order(2)
     public void CqrInterpreter1MatchUpperLowerCase() {
         CqrInterpreter interpreter = new CqrInterpreter1(null);
         ICommand command = interpreter.interpret("sHoW aLgoRitHm");
@@ -25,7 +22,6 @@ public class CqrInterpreter1Test {
     }
 
     @Test
-    @Order(3)
     public void CqrInterpreter1MatchSpaces() {
         CqrInterpreter interpreter = new CqrInterpreter1(null);
         ICommand command = interpreter.interpret(" show algorithm ");
@@ -33,7 +29,6 @@ public class CqrInterpreter1Test {
     }
 
     @Test
-    @Order(4)
     public void CqrInterpreter1MismatchToLong() {
         CqrInterpreter interpreter = new CqrInterpreter1(null);
         ICommand command = interpreter.interpret("show algorithm abc");
@@ -41,7 +36,6 @@ public class CqrInterpreter1Test {
     }
 
     @Test
-    @Order(5)
     public void CqrInterpreter1Mismatch2() {
         CqrInterpreter interpreter = new CqrInterpreter1(null);
         ICommand command = interpreter.interpret("command show algorithm");
