@@ -99,6 +99,8 @@ public class RSACracker {
     }
 
     public List<BigInteger> factorize(BigInteger n) {
+        int loopCount = 0;
+
         BigInteger two = BigInteger.valueOf(2);
         List<BigInteger> factorList = new LinkedList<>();
 
@@ -110,7 +112,7 @@ public class RSACracker {
             factorList.add(two);
             n = n.divide(two);
             try {
-                Thread.sleep(1);
+                Thread.sleep(0,1);
             } catch (InterruptedException interruptedException) {
                 return null;
             }
@@ -126,7 +128,11 @@ public class RSACracker {
                     factor = factor.add(two);
                 }
                 try {
-                    Thread.sleep(1);
+                    loopCount++;
+                    if (loopCount > 1000) {
+                        loopCount = 0;
+                        Thread.sleep(0,1);
+                    }
                 } catch (InterruptedException interruptedException) {
                     return null;
                 }
