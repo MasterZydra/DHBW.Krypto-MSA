@@ -84,6 +84,7 @@ public class Application {
         db.insertParticipant("c", "intruder");
         db.insertChannel("channel1", "a", "b");
         db.insertMessage("a", "b", "plainmessage", "none", "plainmessage", "keyfileName");
+
     }
 
 }
