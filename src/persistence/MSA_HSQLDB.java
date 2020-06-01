@@ -639,7 +639,7 @@ public enum MSA_HSQLDB implements IMsaDB {
                 tables.add(resultSet.getString("TABLE_NAME"));
             }
             if (tables.isEmpty()) {
-                System.out.println("--- drop all tables: no tables found");
+                System.out.println("--- drop all postbox tables: no tables found");
                 return;
             }
 
