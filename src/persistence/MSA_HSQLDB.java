@@ -196,7 +196,7 @@ public enum MSA_HSQLDB implements IMsaDB {
         int participantFromID = getParticipantID(participantFrom);
         long timeStamp = Instant.now().getEpochSecond();
         StringBuilder sqlStringBuilder = new StringBuilder();
-        sqlStringBuilder.append("INSERT INTO postbox"+participantTo+" (participant_from_id, message, timestamp)");
+        sqlStringBuilder.append("INSERT INTO postbox_"+participantTo+" (participant_from_id, message, timestamp)");
         sqlStringBuilder.append(" VALUES (");
         sqlStringBuilder.append(MessageFormat.format("{0}, ''{1}'', {2} ",
                 participantFromID, message, Long.toString(timeStamp)));
