@@ -3,6 +3,10 @@ package cryptography;
 import java.io.File;
 import java.util.concurrent.Callable;
 
+/*
+ * Author: 6439456
+ */
+
 public class CrackTask implements Callable<String> {
     private String message;
     private String algorithm;
