@@ -38,9 +38,10 @@ public class RSACracker {
         byte[] bytes = Base64.getDecoder().decode(encryptedMessage);
         
         try {
-            byte[] plainBytes = execute(new BigInteger(bytes)).toByteArray();
-            if (plainBytes == null)
+            BigInteger plain = execute(new BigInteger(bytes));
+            if (plain == null)
                 return "";
+            byte[] plainBytes = plain.toByteArray();
             return new String(plainBytes);
         } catch (RSACrackerException rsae) {
             System.out.println(rsae.getMessage());
