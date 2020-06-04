@@ -27,15 +27,17 @@ public class CrackMessageCommand extends CqrCommand {
             if (!fileName.toLowerCase().endsWith(".json"))
                 fileName += ".json";
             file = new File(Configuration.instance.getKeyFilePath + fileName);
+
+            // Check if file exists
+            if (!file.exists()) {
+                String msg = "Error: File '" + getParam("keyfile") + "' not found.";
+                logger.log(msg);
+                logger.log("Canceled EncryptMessageCommand");
+                printMessage(msg);
+                return;
+            }
         }
-        // Check if file exists
-        if (!file.exists()) {
-            String msg = "Error: File '" + getParam("keyfile") + "' not found.";
-            logger.log(msg);
-            logger.log("Canceled EncryptMessageCommand");
-            printMessage(msg);
-            return;
-        }
+
 
         // Crack message
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -57,7 +59,6 @@ public class CrackMessageCommand extends CqrCommand {
             logger.log("Failed to crack message");
         }
         future.cancel(true);
-        executor.shutdownNow();
         logger.log("Kill cracking task");
         logger.log("Executed CrackMessageCommand");
     }
