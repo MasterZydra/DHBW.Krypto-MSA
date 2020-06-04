@@ -1,5 +1,5 @@
 package persistence;
-
+//3894913
 import configuration.Configuration;
 import persistence.dataModels.Channel;
 import persistence.dataModels.Message;
@@ -64,7 +64,7 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     @Override
     public void dropAllTables() {
-        dropTablePostbox();
+        dropTablePostboxAll();
         dropTableMessages();
         dropTableChannel();
         dropTableParticipants();
@@ -79,7 +79,6 @@ public enum MSA_HSQLDB implements IMsaDB {
         createTableParticipants();
         createTableChannel();
         createTableMessages();
-        createTablePostbox();
     }
 
     private synchronized void update(String sqlStatement) {
@@ -99,6 +98,7 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     @Override
     public void insertType(String name) {
+        name = name.toLowerCase();
         StringBuilder sqlStringBuilder = new StringBuilder();
         if(getTypeID(name)>0) return;
         sqlStringBuilder.append("INSERT INTO types (name)");
@@ -123,6 +123,7 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     @Override
     public void insertParticipant(String participantName, String typeName) {
+        participantName = participantName.toLowerCase();
         int typeID = getTypeID(typeName);
         StringBuilder sqlStringBuilder = new StringBuilder();
         sqlStringBuilder.append("INSERT INTO participants (").append("name").append(",").append("type_id").append(")");
@@ -132,6 +133,8 @@ public enum MSA_HSQLDB implements IMsaDB {
         sqlStringBuilder.append(")");
         System.out.println("sqlStringBuilder : " + sqlStringBuilder.toString());
         update(sqlStringBuilder.toString());
+
+        createTablePostbox( participantName );
     }
 
     @Override
@@ -141,6 +144,7 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     @Override
     public void insertChannel(String channelName, String participantA, String participantB) {
+        channelName = channelName.toLowerCase();
         int participantA_ID = getParticipantID(participantA);
         int participantB_ID = getParticipantID(participantB);
         StringBuilder sqlStringBuilder = new StringBuilder();
@@ -186,14 +190,16 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     @Override
     public void insertPostboxMessage(String participantTo, String participantFrom, String message) {
+        if (!participantExists(participantFrom) || !participantExists(participantTo)) {
+            System.out.println("Could not save postbox message, participant not found.");
+        }
         int participantFromID = getParticipantID(participantFrom);
-        int participantToID = getParticipantID(participantTo);
         long timeStamp = Instant.now().getEpochSecond();
         StringBuilder sqlStringBuilder = new StringBuilder();
-        sqlStringBuilder.append("INSERT INTO postbox (participant_from_id, participant_to_id, message, timestamp)");
+        sqlStringBuilder.append("INSERT INTO postbox_"+participantTo+" (participant_from_id, message, timestamp)");
         sqlStringBuilder.append(" VALUES (");
-        sqlStringBuilder.append(MessageFormat.format("{0}, {1}, ''{2}'', {3} ",
-                participantFromID, participantToID, message, Long.toString(timeStamp)));
+        sqlStringBuilder.append(MessageFormat.format("{0}, ''{1}'', {2} ",
+                participantFromID, message, Long.toString(timeStamp)));
         sqlStringBuilder.append(")");
         System.out.println("sqlStringBuilder : " + sqlStringBuilder.toString());
         update(sqlStringBuilder.toString());
@@ -260,9 +266,11 @@ public enum MSA_HSQLDB implements IMsaDB {
     @Override
     public List<PostboxMessage> getPostboxMessages(String partToName) {
         List<PostboxMessage> msgList = new ArrayList<>();
-        int partToID = getParticipantID(partToName);
+        if(!participantExists(partToName)){
+            System.out.println("Could not get postbox message, participant not found.");
+        }
         try {
-            String sqlStatement = "SELECT * from POSTBOX where PARTICIPANT_TO_ID=" + partToID;
+            String sqlStatement = "SELECT * from POSTBOX_"+partToName;
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
             while (resultSet.next()) {
@@ -305,7 +313,7 @@ public enum MSA_HSQLDB implements IMsaDB {
     @Override
     public boolean channelExists(String channelName) {
         try {
-            String sqlStatement = "SELECT name from channel where name='" + channelName + "'";
+            String sqlStatement = "SELECT name from channel where LOWER(name)='" + channelName.toLowerCase() + "'";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
             if (!resultSet.next()) {
@@ -320,7 +328,7 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     @Override
     public boolean participantExists(String name) {
-        int participantAID = getParticipantID(name);
+        int participantAID = getParticipantID(name.toLowerCase());
         return participantAID != -1;
     }
 
@@ -363,6 +371,7 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     @Override
     public String getParticipantType(String participant) {
+        participant = participant.toLowerCase();
         int typeID = -1;
         try {
             String sqlStatement = "SELECT TYPE_ID from PARTICIPANTS where name='" + participant + "'";
@@ -383,6 +392,7 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     private int getTypeID(String name) {
         try {
+            name = name.toLowerCase();
             String sqlStatement = "SELECT ID from TYPES where lower(name)=lower('" + name + "')";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
@@ -398,6 +408,7 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     private int getParticipantID(String name) {
         try {
+            name = name.toLowerCase();
             String sqlStatement = "SELECT ID from PARTICIPANTS where name='" + name + "'";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
@@ -444,7 +455,7 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     private int getAlgorithmID(String algorithm) {
         try {
-            String sqlStatement = "SELECT ID from ALGORITHMS where UPPER(name)=UPPER('" + algorithm + "')";
+            String sqlStatement = "SELECT ID from ALGORITHMS where LOWER(name)=LOWER('" + algorithm + "')";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlStatement);
             if (!resultSet.next()) {
@@ -459,6 +470,7 @@ public enum MSA_HSQLDB implements IMsaDB {
 
 
     public Participant getParticipant(String name) {
+        name=name.toLowerCase();
         if (participantExists(name)) {
             return new Participant(name, getParticipantType(name));
         }
@@ -469,31 +481,6 @@ public enum MSA_HSQLDB implements IMsaDB {
         String name = getParticipantName(partID);
         return new Participant(name, getParticipantType(name));
     }
-
-    public List<String> getChannelsToString() {
-        List<String> channelList = new ArrayList<>();
-        try {
-            String sqlStatement = "SELECT * from channel";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-            while (resultSet.next()) {
-                StringBuilder sb = new StringBuilder();
-                int part1 = resultSet.getInt("participant_01");
-                int part2 = resultSet.getInt("participant_02");
-                String part1Name = getParticipantName(part1);
-                String part2Name = getParticipantName(part2);
-                sb.append(resultSet.getString("name")).append(" | ");
-                sb.append(part1Name).append(" and ");
-                sb.append(part2Name);
-                channelList.add(sb.toString());
-            }
-            return channelList;
-        } catch (SQLException sqle) {
-            System.out.println(sqle.getMessage());
-        }
-        return null;
-    }
-
 
     private void createTableTypes() {
         System.out.println("--- createTableTypes");
@@ -600,28 +587,24 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     }
 
-    public void createTablePostbox() {
+    public void createTablePostbox(String participantName) {
         System.out.println("--- createTableTypes");
 
         StringBuilder sqlStringBuilder01 = new StringBuilder();
-        sqlStringBuilder01.append("create table postbox\n" +
+        sqlStringBuilder01.append(
+                "create table POSTBOX_"+participantName+"\n" +
                 "(\n" +
-                "\tid tinyint GENERATED BY DEFAULT AS IDENTITY(START WITH 1)\n" +
-                "\t\tconstraint postbox_pk\n" +
+                "\tID TINYINT identity\n" +
+                "\t\tconstraint POSTBOX_"+participantName+"_PK\n" +
                 "\t\t\tprimary key,\n" +
-                "\tparticipant_to_id tinyint not null\n" +
-                "\t\tconstraint postbox_PARTICIPANTS_ID_fk_2\n" +
+                "\tPARTICIPANT_FROM_ID TINYINT not null\n" +
+                "\t\tconstraint POSTBOX_"+participantName+"_PARTICIPANTS_ID_FK\n" +
                 "\t\t\treferences PARTICIPANTS,\n" +
-                "\tparticipant_from_id tinyint not null\n" +
-                "\t\tconstraint postbox_PARTICIPANTS_ID_fk\n" +
-                "\t\t\treferences PARTICIPANTS,\n" +
-                "\tmessage varchar(50) not null,\n" +
-                "\ttimestamp int\n" +
-                ");\n" +
-                "\n");
+                "\tMESSAGE VARCHAR(50) not null,\n" +
+                "\tTIMESTAMP INTEGER\n" +
+                ")");
         System.out.println("sqlStringBuilder : " + sqlStringBuilder01.toString());
         update(sqlStringBuilder01.toString());
-
     }
 
     public void dropTableParticipants() {
@@ -644,11 +627,41 @@ public enum MSA_HSQLDB implements IMsaDB {
         update(sqlStringBuilder.toString());
     }
 
-    private void dropTablePostbox() {
+    private void dropTablePostboxAll() {
+        System.out.println("--- dropTablePostboxAll");
+
+        try {
+            List<String> tables = new ArrayList<>();
+            String sqlStatement = "SELECT * FROM   INFORMATION_SCHEMA.SYSTEM_TABLES where TABLE_TYPE='TABLE'";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlStatement);
+            while(resultSet.next()){
+                tables.add(resultSet.getString("TABLE_NAME"));
+            }
+            if (tables.isEmpty()) {
+                System.out.println("--- drop all postbox tables: no tables found");
+                return;
+            }
+
+            System.out.println("--- drop all postbox tables from:" + tables.toString());
+            for (String tableName: tables
+            ) {
+                if (tableName.toLowerCase().startsWith("postbox")) {
+                    String updateString = "DROP TABLE "+tableName;
+                    System.out.println("sqlStringBuilder : " + updateString);
+                    update(updateString);
+                }
+            }
+        } catch (SQLException sqle) {
+            System.out.println(sqle.getMessage());
+        }
+    }
+
+    private void dropTablePostbox(String participantName) {
         System.out.println("--- dropTablePostbox");
 
         StringBuilder sqlStringBuilder = new StringBuilder();
-        sqlStringBuilder.append("DROP TABLE postbox");
+        sqlStringBuilder.append("DROP TABLE postbox_"+participantName);
         System.out.println("sqlStringBuilder : " + sqlStringBuilder.toString());
 
         update(sqlStringBuilder.toString());

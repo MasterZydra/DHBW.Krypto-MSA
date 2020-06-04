@@ -1,5 +1,5 @@
 package persistence;
-
+//3894913
 import persistence.dataModels.PostboxMessage;
 import org.junit.*;
 
@@ -105,6 +105,8 @@ public class MSA_HSQLDBTest {
     public void getPostboxMessages() {
         long now = Instant.now().getEpochSecond();
         String b = "";
+        assertTrue(db.participantExists("a"));
+        assertTrue(db.participantExists("b"));
         db.insertPostboxMessage("a","b","message\ncontent\ncontent2");
         db.insertPostboxMessage("a","b","message2\ncontent\ncontent2");
         while(Instant.now().getEpochSecond()<now+3){ //wait 3 seconds for different timestamps
@@ -150,6 +152,7 @@ public class MSA_HSQLDBTest {
     @Test
     public void participantExists() {
         assertTrue(db.participantExists("a"));
+        assertTrue(db.participantExists("A"));
         assertFalse(db.participantExists("z"));
     }
 
