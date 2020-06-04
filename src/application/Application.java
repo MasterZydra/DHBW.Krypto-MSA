@@ -1,5 +1,5 @@
 package application;
-
+//3894913
 
 import configuration.RuntimeStorage;
 import cryptography.CryptoAlgorithm;
@@ -19,8 +19,6 @@ public class Application {
     public static void main(String... args) {
         RuntimeStorage runtimeStorage = RuntimeStorage.instance;
         runtimeStorage.init();
-        IMsaDB db = MSA_HSQLDB.instance;
-        INetwork net = runtimeStorage.network;
         Application a = new Application();
         a.init();
         a.startGui();
@@ -79,12 +77,16 @@ public class Application {
         db.insertType("intruder");
         db.insertAlgorithm("rsa");
         db.insertAlgorithm("shift");
-        db.insertParticipant("a", "normal");
-        db.insertParticipant("b", "normal");
-        db.insertParticipant("c", "intruder");
-        db.insertChannel("channel1", "a", "b");
-        db.insertMessage("a", "b", "plainmessage", "none", "plainmessage", "keyfileName");
-
+        db.insertParticipant("branch_hkg", "normal");
+        db.insertParticipant("branch_cpt", "normal");
+        db.insertParticipant("branch_sfo", "normal");
+        db.insertParticipant("branch_syd", "normal");
+        db.insertParticipant("branch_wuh", "normal");
+        db.insertParticipant("msa", "intruder");
+        db.insertChannel("hkg_wuh", "branch_hkg", "branch_wuh");
+        db.insertChannel("hkg_cpt", "branch_hkg", "branch_cpt");
+        db.insertChannel("cpt_syd", "branch_cpt", "branch_syd");
+        db.insertChannel("syd_sfo", "branch_syd", "branch_sfo");
     }
 
 }
