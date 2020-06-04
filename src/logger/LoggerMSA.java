@@ -1,5 +1,5 @@
 package logger;
-
+//3894913
 import configuration.Configuration;
 
 import java.io.*;
@@ -10,9 +10,7 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 
 public class LoggerMSA {
 
@@ -44,7 +42,6 @@ public class LoggerMSA {
     }
 
     static public String getLatestLog() {
-        List<String> filedates = new ArrayList<>();
         String path = Configuration.instance.logDirectory;
         Path newestLogFile=null;
         Comparator<Path> byTimeStamp = (path1, path2) -> {

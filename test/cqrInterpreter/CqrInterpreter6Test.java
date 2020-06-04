@@ -1,5 +1,5 @@
 package cqrInterpreter;
-
+//3894913
 import commands.CreateChannelCommand;
 import commands.ICommand;
 import org.junit.jupiter.api.AfterEach;
