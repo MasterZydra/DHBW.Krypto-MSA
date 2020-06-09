@@ -95,8 +95,6 @@ public class GUI extends Application {
                     guiController.enableLogging();
                 }
                 break;
-            case F9:
-                commandLineArea.setText("send message \"hello b, this is a\" from a to b using Shift and keyfile shift4.json");
         }
     }
 

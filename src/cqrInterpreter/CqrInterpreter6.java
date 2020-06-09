@@ -1,9 +1,7 @@
 package cqrInterpreter;
-
+//3894913
 import commands.CommandFactory;
 import commands.ICommand;
-import configuration.RuntimeStorage;
-import gui.GuiController;
 
 public class CqrInterpreter6 extends CqrInterpreter{
     private String participant01;
@@ -35,7 +33,6 @@ public class CqrInterpreter6 extends CqrInterpreter{
     @Override
     public ICommand interpret(String cqr) {
         String cqrTrans = this.transformCqrString(cqr);
-        GuiController gui = RuntimeStorage.instance.guiController;
         if (canHandleCQR(cqrTrans, "create channel")) {
             if(this.getParams(cqr)) {
                 ICommand command = CommandFactory.getCreateChannelCommand();
@@ -44,7 +41,7 @@ public class CqrInterpreter6 extends CqrInterpreter{
                 command.setParam("channelName", channelName);
                 return command;
             }
-            gui.displayText("Syntax error: 'create channel [name] from [participant01] to [participant02]' expected");
+            printMessage("Syntax error: 'create channel [name] from [participant01] to [participant02]' expected");
             return null;
         }
         else

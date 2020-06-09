@@ -1,9 +1,7 @@
 package cqrInterpreter;
-
+//3894913
 import commands.CommandFactory;
 import commands.ICommand;
-import configuration.RuntimeStorage;
-import gui.GuiController;
 
 public class CqrInterpreter9 extends CqrInterpreter{
     private String intruderName;
@@ -32,7 +30,6 @@ public class CqrInterpreter9 extends CqrInterpreter{
     @Override
     public ICommand interpret(String cqr) {
         String cqrTrans = this.transformCqrString(cqr);
-        GuiController gui = RuntimeStorage.instance.guiController;
         if (canHandleCQR(cqrTrans, "intrude channel")) {
             if(this.getParams(cqr)) {
                 ICommand command = CommandFactory.getIntrudeChannelCommand();
@@ -40,7 +37,7 @@ public class CqrInterpreter9 extends CqrInterpreter{
                 command.setParam("channelName", channelName);
                 return command;
             }
-            gui.displayText("Syntax error: 'intrude channel [channel] by [participant]' expected");
+            printMessage("Syntax error: 'intrude channel [channel] by [participant]' expected");
             return null;
         }
         else
