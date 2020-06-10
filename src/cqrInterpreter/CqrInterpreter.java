@@ -4,6 +4,10 @@ import commands.ICommand;
 import configuration.RuntimeStorage;
 import gui.GuiController;
 
+/*
+ * Author: 6439456
+ */
+
 public abstract class CqrInterpreter {
     private CqrInterpreter successor;
 
