@@ -22,16 +22,16 @@ public class Shift {
     }
 
     public class Port implements IShiftAlgorithm {
-        public String encrypt(String plainMessage, File keyfile) {
+        public String encrypt(String plainMessage, File keyfile) throws FileNotFoundException {
             return encryptMessage(plainMessage, keyfile);
         }
 
-        public String decrypt(String encryptedMessage, File keyfile) {
+        public String decrypt(String encryptedMessage, File keyfile) throws FileNotFoundException {
             return decryptMessage(encryptedMessage, keyfile);
         }
     }
 
-    private String encryptMessage(String plainMessage, File keyfile) {
+    private String encryptMessage(String plainMessage, File keyfile) throws FileNotFoundException {
         this.getKey(keyfile);
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -44,7 +44,7 @@ public class Shift {
         return stringBuilder.toString();
     }
 
-    private String decryptMessage(String encryptedMessage, File keyfile) {
+    private String decryptMessage(String encryptedMessage, File keyfile) throws FileNotFoundException {
         this.getKey(keyfile);
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -77,29 +77,25 @@ public class Shift {
         return character;
     }
 
-    private void getKey(File keyfile) {
+    private void getKey(File keyfile) throws FileNotFoundException {
         /*
         Example:
         {
 	        "key": 4
         }
          */
-        try {
-            Scanner scanner = new Scanner(keyfile);
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                if (line.contains("\"key\":")) {
-                    String[] lineParts = line.split(":");
-                    line = lineParts[1].trim();
-                    try {
-                        key = Integer.parseInt(line);
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                    }
+        Scanner scanner = new Scanner(keyfile);
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            if (line.contains("\"key\":")) {
+                String[] lineParts = line.split(":");
+                line = lineParts[1].trim();
+                try {
+                    key = Integer.parseInt(line);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
                 }
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
     }
 }
