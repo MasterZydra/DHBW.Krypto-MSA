@@ -25,16 +25,16 @@ public class RSA {
     }
 
     public class Port implements IRsaAlgorithm {
-        public String encrypt(String plainMessage, File publicKeyfile) {
+        public String encrypt(String plainMessage, File publicKeyfile) throws FileNotFoundException {
             return encryptMessage(plainMessage, publicKeyfile);
         }
 
-        public String decrypt(String encryptedMessage, File privateKeyfile) {
+        public String decrypt(String encryptedMessage, File privateKeyfile) throws FileNotFoundException {
             return decryptMessage(encryptedMessage, privateKeyfile);
         }
     }
 
-    private String encryptMessage(String plainMessage, File publicKeyfile) {
+    private String encryptMessage(String plainMessage, File publicKeyfile) throws FileNotFoundException {
         readPublicKeyFile(publicKeyfile);
 
         byte[] bytes = plainMessage.getBytes(Charset.defaultCharset());
@@ -42,7 +42,7 @@ public class RSA {
         return Base64.getEncoder().encodeToString(encrypted);
     }
 
-    private String decryptMessage(String encryptedMessage, File privateKeyfile) {
+    private String decryptMessage(String encryptedMessage, File privateKeyfile) throws FileNotFoundException {
         readPrivateKeyFile(privateKeyfile);
 
         byte[] cipher = Base64.getDecoder().decode(encryptedMessage);
@@ -54,19 +54,19 @@ public class RSA {
         return message.modPow(key.getE(), key.getN());
     }
 
-    private void readPrivateKeyFile(File keyfile) {
+    private void readPrivateKeyFile(File keyfile) throws FileNotFoundException {
         readKeyFile(keyfile, "d");
     }
 
-    private void readPublicKeyFile(File keyfile) {
+    private void readPublicKeyFile(File keyfile) throws FileNotFoundException {
         readKeyFile(keyfile);
     }
 
-    private void readKeyFile(File keyfile) {
+    private void readKeyFile(File keyfile) throws FileNotFoundException {
         readKeyFile(keyfile, "e");
     }
 
-    private void readKeyFile(File keyfile, String eReplacement) {
+    private void readKeyFile(File keyfile, String eReplacement) throws FileNotFoundException {
         /*
         Example:
         {
@@ -78,19 +78,15 @@ public class RSA {
         BigInteger n = null;
         BigInteger e = null;
 
-        try {
-            Scanner scanner = new Scanner(keyfile);
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                if (line.contains("\"n\":")) {
-                    n = getParam(line);
-                }
-                else if (line.contains("\"" + eReplacement + "\":")) {
-                    e = getParam(line);
-                }
+        Scanner scanner = new Scanner(keyfile);
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            if (line.contains("\"n\":")) {
+                n = getParam(line);
             }
-        } catch (FileNotFoundException exception) {
-            exception.printStackTrace();
+            else if (line.contains("\"" + eReplacement + "\":")) {
+                e = getParam(line);
+            }
         }
         
         this.key = new Key(n, e);
