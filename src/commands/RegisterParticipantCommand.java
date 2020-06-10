@@ -28,14 +28,10 @@ public class RegisterParticipantCommand extends CqrCommand {
             return;
         }
 
-        // Add participant to DB
+        // Add participant to DB and create postbox
         logger.log("Insert participant into DB");
         Participant participant = new Participant(getParam("participant"), getParam("type"));
         db.insertParticipant(participant);
-
-        // Add postbox
-        logger.log("Add participant postbox to DB");
-        // TODO Add postbox
 
         String returnMsg = "participant %s with type %s registered and postbox_%s created";
         returnMsg = String.format(returnMsg, getParam("participant"), getParam("type"), getParam("participant"));
