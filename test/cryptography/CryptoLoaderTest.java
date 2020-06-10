@@ -3,6 +3,7 @@ package cryptography;
 import configuration.Configuration;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 
 import org.junit.jupiter.api.*;
@@ -49,6 +50,15 @@ public class CryptoLoaderTest {
         }
 
         assertEquals("Ein Befehl von Julius Caesar ist eingetroffen.", decryptedMsg);
+    }
+
+    @Test
+    public void shiftEnDecryptionFileNotFound() {
+        loader.createCryptographyMethod(CryptoAlgorithm.Shift, CryptoMethod.DECRYPT);
+        Exception e = assertThrows(InvocationTargetException.class, () -> {
+            loader.getCryptoMethod().invoke(loader.getPort(),"some message", new File("non existing file.json"));
+        });
+        assertTrue(e.getCause() instanceof FileNotFoundException);
     }
 
     @Test
@@ -100,6 +110,15 @@ public class CryptoLoaderTest {
     }
 
     @Test
+    public void rsaEnDecryptionFileNotFound() {
+        loader.createCryptographyMethod(CryptoAlgorithm.RSA, CryptoMethod.DECRYPT);
+        Exception e = assertThrows(InvocationTargetException.class, () -> {
+            loader.getCryptoMethod().invoke(loader.getPort(),"some message", new File("non existing file.json"));
+        });
+        assertTrue(e.getCause() instanceof FileNotFoundException);
+    }
+
+    @Test
     public void rsaCracker() {
         String crackedMsg = "";
         try {
@@ -113,5 +132,14 @@ public class CryptoLoaderTest {
         }
 
         assertEquals("Hallo", crackedMsg);
+    }
+
+    @Test
+    public void rsaCrackerFileNotFound() {
+        loader.createCrackerMethod(CryptoAlgorithm.RSA);
+        Exception e = assertThrows(InvocationTargetException.class, () -> {
+            loader.getCryptoMethod().invoke(loader.getPort(),"some message", new File("non existing file.json"));
+        });
+        assertTrue(e.getCause() instanceof FileNotFoundException);
     }
 }
