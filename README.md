@@ -20,6 +20,9 @@ Cracking fails due to timeout
 ## Anmerkungen zur Implementierung
 Um die Anwendung funktionsfähig zu bekommen, sind Abweichungen von der Aufgabenstellung notwendig.
 
+**Eventbus**  
+Damit der Eventbus korrekt funktioniert, musste die `failureaccess-1.0.1.jar` ergänzt werden, da sonst immer nur Fehlermeldungen angezeigt wurden.
+
 **Cracker**  
 Der RSA Cracker benötigt eine `File` für den öffentlichen Schlüssel. Um beim Arbeiten mit der Komponente keine Fallunterscheidung vornehmen zu müssen, wurde das Interface für den Shift Cracker auch um `File` erweitert. Das übergebene Objekt wird jedoch nicht verarbeitet.
 
