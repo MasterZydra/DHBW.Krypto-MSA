@@ -39,6 +39,7 @@ Der CQL Befehl wurde erweitert mit der Option eine Datei zu übergeben:
 - **`show algorithm`**  
 Die in Komponenten gekapselten Algorithmen werden angezeigt.
 Die Meldung im Ausgabebereich der GUI wird dynamisch aus den Dateinamen der jar im Verzeichnis components ermittelt; shift | rsa
+
 - **`encrypt message "[message]" using [algorithm] and keyfile [filename]`**  
 Die zu dem Algorithmus korrespondierende Komponente [algorithm].jar wird dynamisch geladen und die Meldung mit dem key verschlüsselt.  
 Die verschlüsselte Meldung wird im Ausgabebereich der GUI angezeigt.
