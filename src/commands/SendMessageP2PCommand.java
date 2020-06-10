@@ -12,6 +12,7 @@ import persistence.dataModels.Channel;
 import persistence.dataModels.Message;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
 
 public class SendMessageP2PCommand extends CqrCommand {
@@ -48,6 +49,9 @@ public class SendMessageP2PCommand extends CqrCommand {
             db.insertMessage(msg);
         } catch (Exception e) {
             e.printStackTrace();
+            if (e.getCause() instanceof FileNotFoundException) {
+                printFailMessage("Could not find keyfile "+getParam("keyfile")+".");
+            }
             printFailMessage();
             return;
         }
