@@ -35,6 +35,18 @@ Schnittstelle Shift Cracker:
 Der CQL Befehl wurde erweitert mit der Option eine Datei zu übergeben:
 `crack encrypted message "[message]" using [algorithm] [and keyfile [filename]]`
 
+## Aufgabenstellung
+Zu Simulationszwecken wird ein Unternehmensnetzwerk als EventBus dargestellt. An dieses Unternehmensnetzwerk sind fünf Zweigstellen [i] BranchHKG, [ii] BranchCPT, [iii] BranchSFO, [iv] BranchSyd und [v] und BranchWuh angeschlossen.  
+<br>Zwischen den Zweigstellen werden verschlüsselte Nachrichten ausgetauscht.  
+<br>Für die Verschlüsselung stehen ein klassisches Verfahren und RSA zur Verfügung. Die kryptographischen Algorithmen sind in austauschbaren Komponenten gekapselt.  
+<br>Der/die Schlüssel für die Ver-/Entschlüsselung sind in geeigneten Konfigurationsdateien im Format JSON zu speichern.  
+<br>Bei dem Start der Applkation werden bereits definierte Channel automatisch aufgebaut.  
+<br>Durch Drücken der **Taste [F3]** wird der **Debug-Modus** aktiviert oder deaktiviert. Bei aktiviertem Debug-Modus wird bei Ausführung der Befehle encrypt message und decrypt message im Verzeichnis log eine Logdatei [encrypt | decrypt]_[algorithm]_[unix_time_unixseconds].txt angelegt. Diese Logdatei zeichnet die Schritte detailliert und nachvollziehbar auf.  
+<br>Durch Drücken der **Taste [F8]** wird das **Logfile** mit dem neuesten Zeitstempl in den Ausgabe- bereich der GUI geladen und angezeigt.  
+<br>Die Applikation wird über **CQL** (Cryptographic Query Language) gesteuert.  
+<br>Durch Mausklick auf den **Button execute** in der GUI oder Drücken der **Taste [F5]**
+wird der Befehl ausgeführt.
+
 ## CQL (Cryptographic Query Language)
 - **`show algorithm`**  
 Die in Komponenten gekapselten Algorithmen werden angezeigt.
