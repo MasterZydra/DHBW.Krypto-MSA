@@ -1,5 +1,7 @@
 # DHBW.Krypto-MSA
 
+![Screenshot](img/ScreenshotCrack.png)
+
 ## Beispiel anhand der Nachricht "morpheus"
 **Encrypt/Decrypt with RSA**  
 `encrypt message "morpheus" using RSA and keyfile rsa32`  
