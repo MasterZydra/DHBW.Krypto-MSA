@@ -27,16 +27,11 @@ public class CrackTask implements Callable<String> {
     @Override
     public String call() throws Exception {
         CryptoLoader loader = new CryptoLoader();
-        try {
-            // Load component
-            loader.createCrackerMethod(CryptoAlgorithm.valueOfCaseIgnore(algorithm));
+        // Load component
+        loader.createCrackerMethod(CryptoAlgorithm.valueOfCaseIgnore(algorithm));
 
-            // Decrypt message
-            String cracked = (String) loader.getCryptoMethod().invoke(loader.getPort(), message, keyfile);
-            return cracked;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
+        // Decrypt message
+        String cracked = (String) loader.getCryptoMethod().invoke(loader.getPort(), message, keyfile);
+        return cracked;
     }
 }
