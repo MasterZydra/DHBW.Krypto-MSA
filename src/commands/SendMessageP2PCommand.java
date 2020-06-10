@@ -49,8 +49,8 @@ public class SendMessageP2PCommand extends CqrCommand {
             db.insertMessage(msg);
         } catch (Exception e) {
             e.printStackTrace();
-            if (e.getCause() instanceof FileNotFoundException) {
-                printFailMessage("Could not find keyfile "+getParam("keyfile")+".");
+            if (e.getCause() instanceof FileNotFoundException || e instanceof FileNotFoundException) {
+                printFailMessage("Could not find keyfile "+getParam("keyfile")+"");
             }
             printFailMessage();
             return;
