@@ -27,12 +27,12 @@ public class RSACracker {
     }
 
     public class Port implements IRSACracker {
-        public String decrypt(String encryptedMessage, File publicKeyfile) {
+        public String decrypt(String encryptedMessage, File publicKeyfile) throws FileNotFoundException {
             return decryptMessage(encryptedMessage, publicKeyfile);
         }
     }
 
-    private String decryptMessage(String encryptedMessage, File publicKeyfile) {
+    private String decryptMessage(String encryptedMessage, File publicKeyfile) throws FileNotFoundException {
         readKeyFile(publicKeyfile);
         
         byte[] bytes = Base64.getDecoder().decode(encryptedMessage);
@@ -49,7 +49,7 @@ public class RSACracker {
         return null;
     }
 
-    private void readKeyFile(File keyfile) {
+    private void readKeyFile(File keyfile) throws FileNotFoundException {
         /*
         Example:
         {
@@ -58,19 +58,15 @@ public class RSACracker {
           "d": 4465771
         }
          */
-        try {
-            Scanner scanner = new Scanner(keyfile);
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                if (line.contains("\"n\":")) {
-                    n = getParam(line);
-                }
-                else if (line.contains("\"e\":")) {
-                    e = getParam(line);
-                }
+        Scanner scanner = new Scanner(keyfile);
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            if (line.contains("\"n\":")) {
+                n = getParam(line);
             }
-        } catch (FileNotFoundException exception) {
-            exception.printStackTrace();
+            else if (line.contains("\"e\":")) {
+                e = getParam(line);
+            }
         }
     }
 

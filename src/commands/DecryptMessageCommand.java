@@ -46,12 +46,20 @@ public class DecryptMessageCommand extends CqrCommand {
             String decrypted = (String) method.invoke(loader.getPort(), getParam("message"), file);
             logger.log("Message '" + getParam("message") + "' decrypted. Result of decryption: " + decrypted);
             printMessage(decrypted);
-            logger.log("Executed EncryptMessageCommand");
-        } catch (Exception e) {
+            logger.log("Executed DecryptMessageCommand");
+        }
+        catch (NullPointerException e) {
+            String msg = "Error: Algorithm '" + getParam("algorithm").toUpperCase() + "' not found.";
+            logger.log(msg);
+            logger.log("Canceled DecryptMessageCommand");
+            printMessage(msg);
+            return;
+        }
+        catch (Exception e) {
             e.printStackTrace();
             logger.log("Error occurred: " + e.getMessage());
             printFailMessage();
-            logger.log("Executed EncryptMessageCommand");
+            logger.log("Executed DecryptMessageCommand");
             return;
         }
     }
