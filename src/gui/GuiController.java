@@ -31,6 +31,7 @@ public class GuiController {
         ICommand command = RuntimeStorage.instance.cqrInterpreterCoR.interpret(commandText);
         if(command!=null) {
             command.execute();
+            displayText("");
         }
     }
 
