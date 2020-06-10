@@ -47,7 +47,15 @@ public class EncryptMessageCommand extends CqrCommand {
             logger.log("Message '" + getParam("message") + "' encrypted. Result of encryption: " + encrypted);
             printMessage(encrypted);
             logger.log("Executed EncryptMessageCommand");
-        } catch (Exception e) {
+        }
+        catch (NullPointerException e) {
+            String msg = "Error: Algorithm '" + getParam("algorithm").toUpperCase() + "' not found.";
+            logger.log(msg);
+            logger.log("Canceled EncryptMessageCommand");
+            printMessage(msg);
+            return;
+        }
+        catch (Exception e) {
             e.printStackTrace();
             logger.log("Error occurred: " + e.getMessage());
             printFailMessage();
