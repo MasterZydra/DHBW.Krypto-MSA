@@ -3,7 +3,9 @@ package cryptography;
 import configuration.Configuration;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -25,8 +27,17 @@ public class CryptoLoader {
             instance = clazz.getMethod("getInstance").invoke(null);
             port = clazz.getDeclaredField("port").get(instance);
             cryptoMethod = port.getClass().getMethod(method.toString().toLowerCase(), String.class, File.class);
-        }
-        catch (Exception e) {
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -41,8 +52,17 @@ public class CryptoLoader {
             instance = clazz.getMethod("getInstance").invoke(null);
             port = clazz.getDeclaredField("port").get(instance);
             cryptoMethod = port.getClass().getMethod(CryptoMethod.DECRYPT.toString().toLowerCase(), String.class, File.class);
-        }
-        catch (Exception e) {
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
