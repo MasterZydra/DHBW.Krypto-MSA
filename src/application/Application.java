@@ -42,7 +42,6 @@ public class Application {
         IMsaDB db = MSA_HSQLDB.instance;
         INetwork net = RuntimeStorage.instance.network;
         Map<String, Participant> participants = new HashMap<>();
-        populateDatabase(db);
         List<Channel> channels = db.getChannels();
         db.dropAllTables();
         db.createAllTables();
@@ -68,7 +67,7 @@ public class Application {
             net.createChannel(channel.getName(), partNetA, partNetB);
         }
 
-
+        populateDatabase(db);
     }
 
     private void populateDatabase(IMsaDB db) {
