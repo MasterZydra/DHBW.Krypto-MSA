@@ -17,13 +17,13 @@ public class CreateChannelCommand extends CqrCommand {
         String channelName = getParam("channelName");
 
         if (db.channelExists(channelName)) {
-            printFailMessage("channel " + channelName + " already exists");
+            printMessage("channel " + channelName + " already exists");
             return;
         }
 
         Channel channel = db.getChannel(name01, name02);
         if (channel!=null){
-            printFailMessage("communication channel between " + name01
+            printMessage("communication channel between " + name01
                     + " and " + name02 + " already exists");
             return;
         }
@@ -31,11 +31,11 @@ public class CreateChannelCommand extends CqrCommand {
         Participant participant01 = db.getParticipant(name01);
         Participant participant02 = db.getParticipant(name02);
         if (participant01==null) {
-            printFailMessage("participant " + name01 + " not registered");
+            printMessage("participant " + name01 + " not registered");
             return;
         }
         if (participant02==null) {
-            printFailMessage("participant " + name02 + " not registered");
+            printMessage("participant " + name02 + " not registered");
             return;
         }
         channel = new Channel(channelName, participant01, participant02);
@@ -47,9 +47,5 @@ public class CreateChannelCommand extends CqrCommand {
 
         db.insertChannel(channel);
         net.createChannel(channelName,netParticipant1, netParticipant2);
-    }
-
-    private void printFailMessage(String failMessage) {
-        RuntimeStorage.instance.guiController.displayText(failMessage);
     }
 }

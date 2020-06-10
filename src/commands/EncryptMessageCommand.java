@@ -58,17 +58,9 @@ public class EncryptMessageCommand extends CqrCommand {
         catch (Exception e) {
             e.printStackTrace();
             logger.log("Error occurred: " + e.getMessage());
-            printFailMessage();
+            printMessage("Could not process EncryptMessage command");
             logger.log("Executed EncryptMessageCommand");
             return;
         }
-    }
-
-    private void printFailMessage() {
-        printMessage("Could not process EncryptMessage command");
-    }
-
-    private void printMessage(String failMessage) {
-        RuntimeStorage.instance.guiController.displayText(failMessage);
     }
 }

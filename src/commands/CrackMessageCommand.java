@@ -38,7 +38,6 @@ public class CrackMessageCommand extends CqrCommand {
             }
         }
 
-
         // Crack message
         ExecutorService executor = Executors.newSingleThreadExecutor();
         CrackTask task = new CrackTask();
@@ -68,10 +67,6 @@ public class CrackMessageCommand extends CqrCommand {
         future.cancel(true);
         logger.log("Kill cracking task");
         logger.log("Executed CrackMessageCommand");
-    }
-
-    private void printMessage(String failMessage) {
-        RuntimeStorage.instance.guiController.displayText(failMessage);
     }
 }
 

@@ -1,8 +1,6 @@
 package commands;
-
+//3894913
 import configuration.Configuration;
-import configuration.RuntimeStorage;
-import gui.GuiController;
 import logger.LoggerMSA;
 
 import java.util.List;
@@ -14,15 +12,16 @@ public class ShowAlgorithmCommand extends CqrCommand {
         LoggerMSA logger = new LoggerMSA("noCryptoAction", "noAlgorithm");
         logger.log("executing ShowAlgorithmCommand");
         Configuration cfg = Configuration.instance;
-        GuiController gui = RuntimeStorage.instance.guiController;
         List<String> list = cfg.getAlgorithmFileNames();
         String output= "";
         for (String algo: list) {
-            if(!output.isBlank()) output+=" | ";
+            // Exclude crackers
+            if (algo.endsWith("cracker")) continue;
+            if(!output.isBlank()) output += " | ";
             output += algo;
             logger.log("found algo: "+algo);
         }
-        gui.displayText(output);
+        printMessage(output);
         logger.log("displayed output:"+output);
         logger.log("executed ShowAlgorithmCommand");
 

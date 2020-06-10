@@ -23,7 +23,7 @@ public class SendMessageP2PCommand extends CqrCommand {
 
         Channel channel = db.getChannel(getParam("participantFrom"), getParam("participantTo"));
         if (channel==null){
-            printFailMessage("No valid channel between "+getParam("participantFrom")
+            printMessage("No valid channel between "+getParam("participantFrom")
                     + " and "+getParam("participantTo"));
             return;
         }
@@ -50,18 +50,10 @@ public class SendMessageP2PCommand extends CqrCommand {
         } catch (Exception e) {
             e.printStackTrace();
             if (e.getCause() instanceof FileNotFoundException || e instanceof FileNotFoundException) {
-                printFailMessage("Could not find keyfile "+getParam("keyfile")+"");
+                printMessage("Could not find keyfile "+getParam("keyfile")+"");
             }
-            printFailMessage();
+            printMessage("Could not process SendMessageP2P command");
             return;
         }
-    }
-
-    private void printFailMessage() {
-        printFailMessage("Could not process SendMessageP2P command");
-    }
-
-    private void printFailMessage(String failMessage) {
-        RuntimeStorage.instance.guiController.displayText(failMessage);
     }
 }

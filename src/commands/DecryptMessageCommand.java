@@ -58,17 +58,9 @@ public class DecryptMessageCommand extends CqrCommand {
         catch (Exception e) {
             e.printStackTrace();
             logger.log("Error occurred: " + e.getMessage());
-            printFailMessage();
+            printMessage("Could not process DecryptMessage command");
             logger.log("Executed DecryptMessageCommand");
             return;
         }
-    }
-
-    private void printFailMessage() {
-        printMessage("Could not process DecryptMessage command");
-    }
-
-    private void printMessage(String failMessage) {
-        RuntimeStorage.instance.guiController.displayText(failMessage);
     }
 }

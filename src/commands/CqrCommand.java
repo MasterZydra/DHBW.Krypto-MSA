@@ -1,5 +1,8 @@
 package commands;
 
+import configuration.RuntimeStorage;
+import gui.GuiController;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,4 +21,12 @@ public abstract class CqrCommand implements ICommand {
     }
 
     public abstract void execute();
+
+    protected void printMessage(String message) {
+        GuiController guiController = RuntimeStorage.instance.guiController;
+        if (guiController != null)
+            guiController.displayText(message);
+        else
+            System.out.println(message);
+    }
 }

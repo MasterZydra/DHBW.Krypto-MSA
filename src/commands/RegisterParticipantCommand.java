@@ -22,7 +22,7 @@ public class RegisterParticipantCommand extends CqrCommand {
         if (db.participantExists(getParam("participant"))) {
             String returnMsg = "participant %s already exists, using existing postbox_%s";
             returnMsg = String.format(returnMsg, getParam("participant"), getParam("participant"));
-            RuntimeStorage.instance.guiController.displayText(returnMsg);
+            printMessage(returnMsg);
             logger.log(returnMsg);
             logger.log("Executed CrackMessageCommand");
             return;
@@ -35,7 +35,7 @@ public class RegisterParticipantCommand extends CqrCommand {
 
         String returnMsg = "participant %s with type %s registered and postbox_%s created";
         returnMsg = String.format(returnMsg, getParam("participant"), getParam("type"), getParam("participant"));
-        RuntimeStorage.instance.guiController.displayText(returnMsg);
+        printMessage(returnMsg);
 
         logger.log("Executed CrackMessageCommand");
     }

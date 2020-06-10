@@ -14,7 +14,7 @@ public class IntrudeChannelCommand extends CqrCommand {
         IMsaDB db = RuntimeStorage.instance.db;
 
         if ( !db.channelExists(getParam("channelName")) ){
-            printFailMessage("Could not add intruder " + getParam("intruderName") + "to channel " + getParam("channelName"));
+            printMessage("Could not add intruder " + getParam("intruderName") + "to channel " + getParam("channelName"));
             return;
         }
         if (!db.getTypes().contains("intruder")) {
@@ -26,9 +26,5 @@ public class IntrudeChannelCommand extends CqrCommand {
             db.insertParticipant(getParam("intruderName"), "intruder");
         }
         net.addIntruder(getParam("channelName"), new ParticipantIntruder(getParam("intruderName")));
-    }
-
-    private void printFailMessage(String failMessage) {
-        RuntimeStorage.instance.guiController.displayText(failMessage);
     }
 }
