@@ -1,6 +1,6 @@
+package network;
+
 import com.google.common.eventbus.Subscribe;
-import network.MessageEvent;
-import network.Participant;
 
 public class BranchOffice extends Participant {
     public BranchOffice(String name) {
