@@ -27,9 +27,7 @@ public class CryptoLoaderTest {
             loader.createCryptographyMethod(CryptoAlgorithm.Shift, CryptoMethod.ENCRYPT);
             encryptedMsg = (String) loader.getCryptoMethod().invoke(loader.getPort(), "Diese Nachricht bitte verschlüsseln!", fileShift6);
 
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -42,10 +40,7 @@ public class CryptoLoaderTest {
         try {
             loader.createCryptographyMethod(CryptoAlgorithm.Shift, CryptoMethod.DECRYPT);
             decryptedMsg = (String) loader.getCryptoMethod().invoke(loader.getPort(), "Kot Hklknr but Paroay Igkygx oyz kotmkzxullkt.", fileShift6);
-
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -53,7 +48,7 @@ public class CryptoLoaderTest {
     }
 
     @Test
-    public void shiftEnDecryptionFileNotFound() {
+    public void shiftEnDecryptionFileNotFound() throws AlgorithmNotFoundException {
         loader.createCryptographyMethod(CryptoAlgorithm.Shift, CryptoMethod.DECRYPT);
         Exception e = assertThrows(InvocationTargetException.class, () -> {
             loader.getCryptoMethod().invoke(loader.getPort(),"some message", new File("non existing file.json"));
@@ -68,9 +63,7 @@ public class CryptoLoaderTest {
             loader.createCrackerMethod(CryptoAlgorithm.Shift);
             crackedMsg = (String) loader.getCryptoMethod().invoke(loader.getPort(), "Tmxxa. Yquz Zmyq uef Vgxuge Omqemd.", null);
 
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -84,9 +77,7 @@ public class CryptoLoaderTest {
             loader.createCryptographyMethod(CryptoAlgorithm.RSA, CryptoMethod.ENCRYPT);
             encryptedMsg = (String) loader.getCryptoMethod().invoke(loader.getPort(), "Diese Nachricht bitte verschluesseln!", fileRSA256);
 
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -100,9 +91,7 @@ public class CryptoLoaderTest {
             loader.createCryptographyMethod(CryptoAlgorithm.RSA, CryptoMethod.DECRYPT);
             decryptedMsg = (String) loader.getCryptoMethod().invoke(loader.getPort(), "V3PAduevQaaviJ6/37YTc0IxrxSYZImfyxfpcdaMn5AH1MF5YIT6DG1NaDkZDgkcuUSMmT0MS7ylpizPw60oYQ==", fileRSA256);
 
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -110,7 +99,7 @@ public class CryptoLoaderTest {
     }
 
     @Test
-    public void rsaEnDecryptionFileNotFound() {
+    public void rsaEnDecryptionFileNotFound() throws AlgorithmNotFoundException {
         loader.createCryptographyMethod(CryptoAlgorithm.RSA, CryptoMethod.DECRYPT);
         Exception e = assertThrows(InvocationTargetException.class, () -> {
             loader.getCryptoMethod().invoke(loader.getPort(),"some message", new File("non existing file.json"));
@@ -125,9 +114,7 @@ public class CryptoLoaderTest {
             loader.createCrackerMethod(CryptoAlgorithm.RSA);
             crackedMsg = (String) loader.getCryptoMethod().invoke(loader.getPort(), "BqGfopSO", fileRSA24);
 
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -135,7 +122,7 @@ public class CryptoLoaderTest {
     }
 
     @Test
-    public void rsaCrackerFileNotFound() {
+    public void rsaCrackerFileNotFound() throws AlgorithmNotFoundException {
         loader.createCrackerMethod(CryptoAlgorithm.RSA);
         Exception e = assertThrows(InvocationTargetException.class, () -> {
             loader.getCryptoMethod().invoke(loader.getPort(),"some message", new File("non existing file.json"));

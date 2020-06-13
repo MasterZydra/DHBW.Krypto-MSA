@@ -3,6 +3,7 @@ package network;
 import com.google.common.eventbus.Subscribe;
 import configuration.Configuration;
 import configuration.RuntimeStorage;
+import cryptography.AlgorithmNotFoundException;
 import cryptography.CryptoAlgorithm;
 import cryptography.CryptoLoader;
 import cryptography.CryptoMethod;
@@ -43,7 +44,7 @@ public abstract class Participant {
             decrypted = (String) method.invoke(loader.getPort(), event.getMessage(), file);
             System.out.println(this.name +" received message from " + event.getSender());
             System.out.println("message:"+event.getMessage() + " decrypted:"+decrypted);
-        } catch (IllegalAccessException | InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException | AlgorithmNotFoundException e) {
             e.printStackTrace();
             return;
         }

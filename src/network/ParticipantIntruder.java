@@ -4,6 +4,7 @@ import com.google.common.base.Stopwatch;
 import com.google.common.eventbus.Subscribe;
 import configuration.Configuration;
 import configuration.RuntimeStorage;
+import cryptography.AlgorithmNotFoundException;
 import cryptography.CryptoAlgorithm;
 import cryptography.CryptoLoader;
 import gui.GuiController;
@@ -46,7 +47,11 @@ public class ParticipantIntruder extends Participant {
         try {
             forkJoinPool.submit(() ->
             {
-                loader.createCrackerMethod(CryptoAlgorithm.valueOfCaseIgnore(event.getAlgorithm()));
+                try {
+                    loader.createCrackerMethod(CryptoAlgorithm.valueOfCaseIgnore(event.getAlgorithm()));
+                } catch (AlgorithmNotFoundException e) {
+                    e.printStackTrace();
+                }
                 Method method = loader.getCryptoMethod();
                 try {
                     timer.start();
