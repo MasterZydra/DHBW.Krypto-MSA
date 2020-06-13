@@ -28,7 +28,6 @@ public class ParticipantIntruder extends Participant {
     @Override
     @Subscribe
     public void receiveMessage(MessageEvent event){
-        //TODO: get cracked success status from cracking method
         AtomicBoolean crackedSuccess = new AtomicBoolean(true);
         GuiController gui = RuntimeStorage.instance.guiController;
         IMsaDB db = RuntimeStorage.instance.db;
@@ -39,7 +38,6 @@ public class ParticipantIntruder extends Participant {
         gui.displayText(this.name + " received new message");
 
         CryptoLoader loader = new CryptoLoader();
-        String encryptedMessage = event.getMessage();
         AtomicReference<String> decryptedMessage = new AtomicReference<>("");
         ForkJoinPool forkJoinPool = new ForkJoinPool(1);
         Stopwatch timer = Stopwatch.createUnstarted();
