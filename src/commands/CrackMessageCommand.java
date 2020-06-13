@@ -54,7 +54,7 @@ public class CrackMessageCommand extends CqrCommand {
             logger.log("- Cracked message: " + crackedMsg);
         }
         catch (TimeoutException | InterruptedException | ExecutionException e) {
-            if (e.getCause() instanceof NullPointerException) {
+            if (e.getCause() instanceof AlgorithmNotFoundException) {
                 String msg = "Error: Algorithm '" + getParam("algorithm").toUpperCase() + "' not found.";
                 logger.log(msg);
                 logger.log("Canceled CrackMessageCommand");

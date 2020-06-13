@@ -48,7 +48,7 @@ public class DecryptMessageCommand extends CqrCommand {
             printMessage(decrypted);
             logger.log("Executed DecryptMessageCommand");
         }
-        catch (NullPointerException e) {
+        catch (AlgorithmNotFoundException e) {
             String msg = "Error: Algorithm '" + getParam("algorithm").toUpperCase() + "' not found.";
             logger.log(msg);
             logger.log("Canceled DecryptMessageCommand");

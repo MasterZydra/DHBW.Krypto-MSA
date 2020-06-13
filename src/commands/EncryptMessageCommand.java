@@ -48,7 +48,7 @@ public class EncryptMessageCommand extends CqrCommand {
             printMessage(encrypted);
             logger.log("Executed EncryptMessageCommand");
         }
-        catch (NullPointerException e) {
+        catch (AlgorithmNotFoundException e) {
             String msg = "Error: Algorithm '" + getParam("algorithm").toUpperCase() + "' not found.";
             logger.log(msg);
             logger.log("Canceled EncryptMessageCommand");
