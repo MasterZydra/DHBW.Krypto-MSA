@@ -1,5 +1,9 @@
 package network;
 
+/*
+ * Author: 6439456
+ */
+
 public class MessageEvent {
     private String receiver;
     private String message;

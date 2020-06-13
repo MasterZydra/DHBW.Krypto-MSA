@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Author: 6439456
+ */
+
 public class Network implements INetwork {
     private Map<String , IChannel> channels = new HashMap<>();
 

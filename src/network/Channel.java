@@ -5,6 +5,10 @@ import com.google.common.eventbus.EventBus;
 import java.util.LinkedList;
 import java.util.List;
 
+/*
+ * Author: 6439456
+ */
+
 public class Channel implements IChannel {
     private String name;
     private EventBus eventBus;

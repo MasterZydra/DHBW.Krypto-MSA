@@ -3,6 +3,10 @@ package cqrInterpreter;
 import commands.CommandFactory;
 import commands.ICommand;
 
+/*
+ * Author: 6439456
+ */
+
 public class CqrInterpreter5 extends CqrInterpreter{
     private String participant;
     private String type;

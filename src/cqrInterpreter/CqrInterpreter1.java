@@ -3,6 +3,10 @@ package cqrInterpreter;
 import commands.CommandFactory;
 import commands.ICommand;
 
+/*
+ * Author: 6439456
+ */
+
 public class CqrInterpreter1 extends CqrInterpreter{
     public CqrInterpreter1(CqrInterpreter successor) {
         this.setSuccessor(successor);
