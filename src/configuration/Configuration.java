@@ -6,19 +6,19 @@ import logger.LoggerMSA;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 public enum Configuration {
     instance;
 
     public static RuntimeStorage runtimeStorage = RuntimeStorage.instance;
 
-    //default values
     public int crackingMaxSeconds;
-
 
     // common
     public final String ud = System.getProperty("user.dir");
@@ -101,15 +101,15 @@ public enum Configuration {
     public List<String> getAlgorithmFileNames() {
         List<String> filenames = new ArrayList<>();
         String path = Configuration.instance.componentDirectory;
-        try {
-            Files.walk(Paths.get(path))
-                    .filter(Files::isRegularFile)
-                    .forEach((f)->{
-                        String file = f.toString();
-                        if( file.endsWith(".jar")){
-                            String fName = f.getFileName().toString().toLowerCase();
-                            filenames.add(fName.substring(0,fName.length()-4));}
-                    });
+        try (Stream<Path> walk = Files.walk(Paths.get(path))){
+            walk.filter(Files::isRegularFile)
+                .forEach(f -> {
+                    String file = f.toString();
+                    if (file.endsWith(".jar")) {
+                        String fName = f.getFileName().toString().toLowerCase();
+                        filenames.add(fName.substring(0, fName.length() - 4));
+                    }
+                });
         } catch (IOException e) {
             e.printStackTrace();
         }

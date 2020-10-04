@@ -26,7 +26,7 @@ public class CqrInterpreter2 extends CqrInterpreter{
             if (validCqr) {
                 algo = usings[1];
                 file = usings[4];
-                validCqr &= !algo.isEmpty() && !file.isEmpty();
+                validCqr = !algo.isEmpty() && !file.isEmpty();
             }
         }
         return validCqr;
@@ -37,8 +37,8 @@ public class CqrInterpreter2 extends CqrInterpreter{
         String cqrTrans = this.transformCqrString(cqr);
 
         if (canHandleCQR(cqrTrans, "encrypt message")) {
-            int firstQuote = cqr.indexOf("\"");
-            int lastQuote = cqr.lastIndexOf("\"");
+            int firstQuote = cqr.indexOf('\"');
+            int lastQuote = cqr.lastIndexOf('\"');
 
             if (firstQuote != -1 && lastQuote != -1 && firstQuote != lastQuote) {
                 String message = cqr.substring(firstQuote + 1, lastQuote);

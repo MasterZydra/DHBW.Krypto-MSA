@@ -19,15 +19,15 @@ public class CqrInterpreter5 extends CqrInterpreter{
         String[] cqrParts = cqr.trim().split(" ");
         boolean validCqr = cqrParts.length == 6;
         if (validCqr) {
-            validCqr &= cqrParts[3].equalsIgnoreCase("with");
+            validCqr = cqrParts[3].equalsIgnoreCase("with");
             validCqr &= cqrParts[4].equalsIgnoreCase("type");
 
             if (validCqr) {
                 participant = cqrParts[2];
                 type = cqrParts[5].toLowerCase();
 
-                validCqr &= !participant.isEmpty();
-                validCqr &= (type.equals("normal") |
+                validCqr = !participant.isEmpty();
+                validCqr &= (type.equals("normal") ||
                         type.equals("intruder"));
             }
         }

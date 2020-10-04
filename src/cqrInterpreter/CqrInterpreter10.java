@@ -38,8 +38,8 @@ public class CqrInterpreter10 extends CqrInterpreter{
     public ICommand interpret(String cqr) {
         String cqrTrans = this.transformCqrString(cqr);
         if (canHandleCQR(cqrTrans, "send message")) {
-            int firstQuote = cqr.indexOf("\"");
-            int lastQuote = cqr.lastIndexOf("\"");
+            int firstQuote = cqr.indexOf('\"');
+            int lastQuote = cqr.lastIndexOf('\"');
 
             if (firstQuote != -1 && lastQuote != -1 && firstQuote != lastQuote) {
                 message = cqr.substring(firstQuote + 1, lastQuote);

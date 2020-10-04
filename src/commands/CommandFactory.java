@@ -1,6 +1,9 @@
 package commands;
 
 public class CommandFactory {
+    private CommandFactory() {
+    }
+
     public static ICommand getShowAlgorithmCommand() {
         return new ShowAlgorithmCommand();
     }
@@ -40,4 +43,5 @@ public class CommandFactory {
     public static ICommand getCreateChannelCommand() {
         return new CreateChannelCommand() ;
     }
+
 }

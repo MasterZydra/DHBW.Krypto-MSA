@@ -2,18 +2,13 @@ package gui;
 
 
 import configuration.Configuration;
-
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -44,17 +39,9 @@ public class GUI extends Application {
         Button closeButton = new Button("Close");
         closeButton.setPrefSize(100, 20);
 
-        executeButton.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-                guiController.executeCommand(commandLineArea.getText());
-            }
-        });
+        executeButton.setOnAction(event -> guiController.executeCommand(commandLineArea.getText()));
 
-        closeButton.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent actionEvent) {
-                guiController.close();
-            }
-        });
+        closeButton.setOnAction(actionEvent -> guiController.close());
 
         commandLineArea = new TextArea();
         commandLineArea.setWrapText(true);
@@ -74,7 +61,7 @@ public class GUI extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, (keyInput) -> keyPressed(keyInput.getCode()));
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, keyInput -> keyPressed(keyInput.getCode()));
     }
 
     private void keyPressed(KeyCode keyCode) {
@@ -95,6 +82,7 @@ public class GUI extends Application {
                     guiController.enableLogging();
                 }
                 break;
+            default:
         }
     }
 
