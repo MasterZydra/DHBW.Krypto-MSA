@@ -28,10 +28,8 @@ public class CryptoLoader {
         }
         try {
             urls = new URL[]{new File(Configuration.instance.getCryptoAlgorithmPath(cryptoAlgorithm)).toURI().toURL()};
-            Class clazz;
-            try (URLClassLoader urlClassLoader = new URLClassLoader(urls, CryptoLoader.class.getClassLoader())) {
-                clazz = Class.forName(cryptoAlgorithm.toString(), true, urlClassLoader);
-            }
+            URLClassLoader urlClassLoader = new URLClassLoader(urls, CryptoLoader.class.getClassLoader());
+            Class clazz = Class.forName(cryptoAlgorithm.toString(), true, urlClassLoader);
 
             instance = clazz.getMethod("getInstance").invoke(null);
             port = clazz.getDeclaredField("port").get(instance);
@@ -52,10 +50,8 @@ public class CryptoLoader {
             e.printStackTrace();
         }
         try {
-            Class clazz;
-            try (URLClassLoader urlClassLoader = new URLClassLoader(urls, CryptoLoader.class.getClassLoader())) {
-                clazz = Class.forName(cryptoAlgorithm.toString() + "Cracker", true, urlClassLoader);
-            }
+            URLClassLoader urlClassLoader = new URLClassLoader(urls, CryptoLoader.class.getClassLoader());
+            Class clazz = Class.forName(cryptoAlgorithm.toString() + "Cracker", true, urlClassLoader);
 
             instance = clazz.getMethod("getInstance").invoke(null);
             port = clazz.getDeclaredField("port").get(instance);
