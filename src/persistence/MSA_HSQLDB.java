@@ -53,8 +53,7 @@ public enum MSA_HSQLDB implements IMsaDB {
     public void shutdown() {
         System.out.println("--- shutdown");
 
-        try {
-            Statement statement = connection.createStatement();
+        try (Statement statement = connection.createStatement()){
             statement.execute("SHUTDOWN");
             connection.close();
         } catch (SQLException sqle) {
@@ -82,14 +81,12 @@ public enum MSA_HSQLDB implements IMsaDB {
     }
 
     private synchronized void update(String sqlStatement) {
-        try {
-            Statement statement = connection.createStatement();
+        try (Statement statement = connection.createStatement()){
             int result = statement.executeUpdate(sqlStatement);
 
             if (result == -1) {
                 System.out.println("error executing " + sqlStatement);
             }
-            statement.close();
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
         }
@@ -214,12 +211,12 @@ public enum MSA_HSQLDB implements IMsaDB {
     @Override
     public List<String> getTypes() {
         List<String> types = new ArrayList<>();
-        try {
+        try  (Statement statement = connection.createStatement()){
             String sqlStatement = "SELECT * from TYPES";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-            while (resultSet.next()) {
-                types.add(resultSet.getString("name"));
+            try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                while (resultSet.next()) {
+                    types.add(resultSet.getString("name"));
+                }
             }
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
@@ -230,12 +227,12 @@ public enum MSA_HSQLDB implements IMsaDB {
     @Override
     public List<String> getAlgorithms() {
         List<String> algos = new ArrayList<>();
-        try {
+        try (Statement statement = connection.createStatement()){
             String sqlStatement = "SELECT * from ALGORITHMS";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-            while (resultSet.next()) {
-                algos.add(resultSet.getString("name"));
+            try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                while (resultSet.next()) {
+                    algos.add(resultSet.getString("name"));
+                }
             }
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
@@ -246,15 +243,15 @@ public enum MSA_HSQLDB implements IMsaDB {
     @Override
     public List<Participant> getParticipants() {
         List<Participant> participants = new ArrayList<>();
-        try {
+        try (Statement statement = connection.createStatement()){
             String sqlStatement = "SELECT * from PARTICIPANTS";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-            while (resultSet.next()) {
-                String name = resultSet.getString("name");
-                String type = getTypeName(resultSet.getInt("type_id"));
-                Participant p = new Participant(name, type);
-                participants.add(p);
+            try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                while (resultSet.next()) {
+                    String name = resultSet.getString("name");
+                    String type = getTypeName(resultSet.getInt("type_id"));
+                    Participant p = new Participant(name, type);
+                    participants.add(p);
+                }
             }
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
@@ -269,19 +266,19 @@ public enum MSA_HSQLDB implements IMsaDB {
         if(!participantExists(partToName)){
             System.out.println("Could not get postbox message, participant not found.");
         }
-        try {
+        try (Statement statement = connection.createStatement()){
             String sqlStatement = "SELECT * from POSTBOX_"+partToName;
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-            while (resultSet.next()) {
-                int partFromID = resultSet.getInt("participant_from_id");
-                String partFromName = getParticipantName(partFromID);
-                Participant partFrom = new Participant(partFromName, getParticipantType(partFromName));
-                Participant partTo = new Participant(partToName, getParticipantType(partToName));
-                String timestamp = Integer.toString(resultSet.getInt("timestamp"));
-                String message = resultSet.getString("message");
-                PostboxMessage p = new PostboxMessage(partFrom, partTo, message, timestamp);
-                msgList.add(p);
+            try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                while (resultSet.next()) {
+                    int partFromID = resultSet.getInt("participant_from_id");
+                    String partFromName = getParticipantName(partFromID);
+                    Participant partFrom = new Participant(partFromName, getParticipantType(partFromName));
+                    Participant partTo = new Participant(partToName, getParticipantType(partToName));
+                    String timestamp = Integer.toString(resultSet.getInt("timestamp"));
+                    String message = resultSet.getString("message");
+                    PostboxMessage p = new PostboxMessage(partFrom, partTo, message, timestamp);
+                    msgList.add(p);
+                }
             }
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
@@ -293,16 +290,16 @@ public enum MSA_HSQLDB implements IMsaDB {
     public List<Channel> getChannels() {
         List<Channel> channelList = new ArrayList<>();
 
-        try {
+        try  (Statement statement = connection.createStatement()){
             String sqlStatement = "SELECT * from channel";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-            while (resultSet.next()) {
-                int part1ID = resultSet.getInt("participant_01");
-                int part2ID = resultSet.getInt("participant_02");
-                Participant partA = getParticipant(part1ID);
-                Participant partB = getParticipant(part2ID);
-                channelList.add(getChannel(partA.getName(), partB.getName()));
+            try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                while (resultSet.next()) {
+                    int part1ID = resultSet.getInt("participant_01");
+                    int part2ID = resultSet.getInt("participant_02");
+                    Participant partA = getParticipant(part1ID);
+                    Participant partB = getParticipant(part2ID);
+                    channelList.add(getChannel(partA.getName(), partB.getName()));
+                }
             }
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
@@ -312,12 +309,12 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     @Override
     public boolean channelExists(String channelName) {
-        try {
+        try (Statement statement = connection.createStatement()){
             String sqlStatement = "SELECT name from channel where LOWER(name)='" + channelName.toLowerCase() + "'";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-            if (!resultSet.next()) {
-                throw new SQLException(channelName + " channel not found");
+            try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                if (!resultSet.next()) {
+                    throw new SQLException(channelName + " channel not found");
+                }
             }
             return true;
         } catch (SQLException sqle) {
@@ -334,18 +331,19 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     @Override
     public Channel getChannel(String participantA, String participantB) {
-        try {
+        try (Statement statement = connection.createStatement()){
             int participantAID = getParticipantID(participantA);
             int participantBID = getParticipantID(participantB);
             String sqlStatement = MessageFormat.format(
                     "SELECT name from channel where (participant_01=''{0}'' AND participant_02=''{1}'') or (participant_01=''{1}'' AND participant_02=''{0}'')",
                     participantAID, participantBID);
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-            if (!resultSet.next()) {
-                throw new SQLException(" channel not found with participants " + participantA + " " + participantB);
+            String channelName;
+            try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                if (!resultSet.next()) {
+                    throw new SQLException(" channel not found with participants " + participantA + " " + participantB);
+                }
+                channelName = resultSet.getString("name");
             }
-            String channelName = resultSet.getString("name");
             return new Channel(channelName, getParticipant(participantA), getParticipant(participantB));
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
@@ -355,14 +353,14 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     @Override
     public void dropChannel(String channelName) {
-        try {
+        try (Statement statement = connection.createStatement()){
             String sqlStatement = MessageFormat.format(
                     "DELETE FROM channel WHERE name=''{0}''",
                     channelName);
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-            if (!resultSet.next()) {
-                throw new SQLException(channelName + " could not be deleted");
+            try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                if (!resultSet.next()) {
+                    throw new SQLException(channelName + " could not be deleted");
+                }
             }
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
@@ -371,16 +369,17 @@ public enum MSA_HSQLDB implements IMsaDB {
 
     @Override
     public String getParticipantType(String participant) {
+        if (participant == null) return null;
         participant = participant.toLowerCase();
         int typeID = -1;
-        try {
+        try (Statement statement = connection.createStatement()){
             String sqlStatement = "SELECT TYPE_ID from PARTICIPANTS where name='" + participant + "'";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-            if (!resultSet.next()) {
-                throw new SQLException(participant + " participant not found");
+            try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                if (!resultSet.next()) {
+                    throw new SQLException(participant + " participant not found");
+                }
+                typeID = resultSet.getInt("TYPE_ID");
             }
-            typeID = resultSet.getInt("TYPE_ID");
             String typeName = getTypeName(typeID);
             return typeName;
 
@@ -391,15 +390,15 @@ public enum MSA_HSQLDB implements IMsaDB {
     }
 
     private int getTypeID(String name) {
-        try {
+        try (Statement statement = connection.createStatement()){
             name = name.toLowerCase();
             String sqlStatement = "SELECT ID from TYPES where lower(name)=lower('" + name + "')";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-            if (!resultSet.next()) {
-                throw new SQLException(name + " type not found");
+            try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                if (!resultSet.next()) {
+                    throw new SQLException(name + " type not found");
+                }
+                return resultSet.getInt("ID");
             }
-            return resultSet.getInt("ID");
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
         }
@@ -407,15 +406,15 @@ public enum MSA_HSQLDB implements IMsaDB {
     }
 
     private int getParticipantID(String name) {
-        try {
+        try (Statement statement = connection.createStatement()){
             name = name.toLowerCase();
             String sqlStatement = "SELECT ID from PARTICIPANTS where name='" + name + "'";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-            if (!resultSet.next()) {
-                throw new SQLException(name + " participant not found");
+            try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                if (!resultSet.next()) {
+                    throw new SQLException(name + " participant not found");
+                }
+                return resultSet.getInt("ID");
             }
-            return resultSet.getInt("ID");
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
         }
@@ -423,15 +422,14 @@ public enum MSA_HSQLDB implements IMsaDB {
     }
 
     private String getParticipantName(int participantID) {
-        try {
+        try (Statement statement = connection.createStatement()){
             String sqlStatement = "SELECT name from participants where ID=" + participantID;
-
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-            if (!resultSet.next()) {
-                throw new SQLException(" participant not found with ID " + participantID);
+            try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                if (!resultSet.next()) {
+                    throw new SQLException(" participant not found with ID " + participantID);
+                }
+                return resultSet.getString("name");
             }
-            return resultSet.getString("name");
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
         }
@@ -439,14 +437,14 @@ public enum MSA_HSQLDB implements IMsaDB {
     }
 
     private String getTypeName(int typeID) {
-        try {
+        try (Statement statement = connection.createStatement()){
             String sqlStatement = "SELECT name from TYPES where ID=" + typeID;
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-            if (!resultSet.next()) {
-                throw new SQLException(" type not found with ID " + typeID);
+            try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                if (!resultSet.next()) {
+                    throw new SQLException(" type not found with ID " + typeID);
+                }
+                return resultSet.getString("name");
             }
-            return resultSet.getString("name");
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
         }
@@ -454,14 +452,14 @@ public enum MSA_HSQLDB implements IMsaDB {
     }
 
     private int getAlgorithmID(String algorithm) {
-        try {
+        try (Statement statement = connection.createStatement()){
             String sqlStatement = "SELECT ID from ALGORITHMS where LOWER(name)=LOWER('" + algorithm + "')";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-            if (!resultSet.next()) {
-                throw new SQLException(algorithm + " algorithm not found");
+            try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                if (!resultSet.next()) {
+                    throw new SQLException(algorithm + " algorithm not found");
+                }
+                return resultSet.getInt("ID");
             }
-            return resultSet.getInt("ID");
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
         }
@@ -630,13 +628,13 @@ public enum MSA_HSQLDB implements IMsaDB {
     private void dropTablePostboxAll() {
         System.out.println("--- dropTablePostboxAll");
 
-        try {
+        try (Statement statement = connection.createStatement()){
             List<String> tables = new ArrayList<>();
             String sqlStatement = "SELECT * FROM   INFORMATION_SCHEMA.SYSTEM_TABLES where TABLE_TYPE='TABLE'";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-            while(resultSet.next()){
-                tables.add(resultSet.getString("TABLE_NAME"));
+            try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                while (resultSet.next()) {
+                    tables.add(resultSet.getString("TABLE_NAME"));
+                }
             }
             if (tables.isEmpty()) {
                 System.out.println("--- drop all postbox tables: no tables found");

@@ -1,15 +1,11 @@
 package logger;
 
-import java.io.File;
 import java.time.Instant;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 public class LoggerMSA_JavaAPI {
-
-    private static final String logFolder = "log";
-    private final String fileSeparator = File.separator;
 
     private final Logger logger = Logger.getAnonymousLogger();
     private FileHandler fileHandler = null;

@@ -11,13 +11,14 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Comparator;
+import java.util.stream.Stream;
 
 public class LoggerMSA {
 
-    static private Configuration cfg = Configuration.instance;
-    static private String logDirectory = cfg.logDirectory;
-    static private boolean loggingEnabled = false;
-    private File logFile = null;
+    private static Configuration cfg = Configuration.instance;
+    private static String logDirectory = cfg.logDirectory;
+    private static boolean loggingEnabled = false;
+    private File logFile;
 
     public LoggerMSA(String cryptographyActionType, String algorithm) {
         String fileName = cryptographyActionType.toLowerCase() + "_"
@@ -41,36 +42,38 @@ public class LoggerMSA {
         }
     }
 
-    static public String getLatestLog() {
+    public static String getLatestLog() {
         String path = Configuration.instance.logDirectory;
         Path newestLogFile=null;
         Comparator<Path> byTimeStamp = (path1, path2) -> {
             String path1str = path1.getFileName().toString();
-            long timeStamp1 = Long.parseLong( path1str.substring(path1str.lastIndexOf("_")+1, path1str.length() - 4) );
+            long timeStamp1 = Long.parseLong( path1str.substring(path1str.lastIndexOf('_')+1, path1str.length() - 4) );
             String path2str = path2.getFileName().toString();
-            long timeStamp2 = Long.parseLong( path2str.substring(path2str.lastIndexOf("_")+1, path2str.length() - 4) );
+            long timeStamp2 = Long.parseLong( path2str.substring(path2str.lastIndexOf('_')+1, path2str.length() - 4) );
             return Long.compare(timeStamp1,timeStamp2);
         };
 
-        try {
-            newestLogFile = Files.walk(Paths.get(path))
+        try (Stream<Path> walk = Files.walk(Paths.get(path))){
+            newestLogFile = walk
                     .filter(Files::isRegularFile)
                     .max(byTimeStamp).orElse(null);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        if (newestLogFile==null){
+            return "No logs found in: " + Configuration.instance.logDirectory;
+        }
         StringBuilder sb = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(newestLogFile.toFile(), StandardCharsets.UTF_8)))
         {
-            String line=null;
+            String line;
             String fileName = newestLogFile.getFileName().toString();
             sb.append("Log:\n").append(fileName).append("\n");
-            Instant time = Instant.ofEpochSecond(Long.parseLong( fileName.substring(fileName.lastIndexOf("_")+1, fileName.length() - 4) ));
+            Instant time = Instant.ofEpochSecond(Long.parseLong( fileName.substring(fileName.lastIndexOf('_')+1, fileName.length() - 4) ));
             LocalDateTime ldt = LocalDateTime.ofInstant(time, ZoneId.systemDefault());
             String date = String.format("%d %s %d at %d:%d%n", ldt.getDayOfMonth(), ldt.getMonth(),
                     ldt.getYear(), ldt.getHour(), ldt.getMinute());
-            sb.append(date + "\n");
+            sb.append(date).append("\n");
             while ((line = br.readLine()) != null) {
                 sb.append(line).append("\n");
             }

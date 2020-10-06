@@ -16,10 +16,10 @@ public class CqrInterpreter4 extends CqrInterpreter{
     }
 
     private boolean isValid(String beforeMessage) {
-        boolean valid = true;
+        boolean valid;
 
         String[] messageParts = this.transformCqrString(beforeMessage).split(" ");
-        valid &= messageParts[2].equalsIgnoreCase("message");
+        valid = messageParts[2].equalsIgnoreCase("message");
 
         return valid;
     }
@@ -54,8 +54,8 @@ public class CqrInterpreter4 extends CqrInterpreter{
         String cqrTrans = this.transformCqrString(cqr);
 
         if (canHandleCQR(cqrTrans, "crack encrypted")) {
-            int firstQuote = cqr.indexOf("\"");
-            int lastQuote = cqr.lastIndexOf("\"");
+            int firstQuote = cqr.indexOf('\"');
+            int lastQuote = cqr.lastIndexOf('\"');
 
             if (firstQuote != -1 &&
                     lastQuote != -1 &&

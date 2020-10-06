@@ -22,15 +22,12 @@ public enum HSQLDB {
     }
 
     private synchronized void update(String sqlStatement) {
-        try {
-            Statement statement = connection.createStatement();
+        try (Statement statement = connection.createStatement()) {
             int result = statement.executeUpdate(sqlStatement);
 
             if (result == -1) {
                 System.out.println("error executing " + sqlStatement);
             }
-
-            statement.close();
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
         }
@@ -39,13 +36,12 @@ public enum HSQLDB {
     private int getNextID(String table) {
         int nextID = 0;
 
-        try {
+        try (Statement statement = connection.createStatement()) {
             String sqlStatement = "SELECT max(id) FROM " + table;
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlStatement);
-
-            while (resultSet.next()) {
-                nextID = resultSet.getInt(1);
+            try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                while (resultSet.next()) {
+                    nextID = resultSet.getInt(1);
+                }
             }
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
@@ -145,8 +141,7 @@ public enum HSQLDB {
     public void shutdown() {
         System.out.println("--- shutdown");
 
-        try {
-            Statement statement = connection.createStatement();
+        try (Statement statement = connection.createStatement()){
             statement.execute("SHUTDOWN");
             connection.close();
         } catch (SQLException sqle) {
